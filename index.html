@@ -4,36 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <!-- Primary Meta Tags (SEO) -->
+    <!-- SEO Meta Tags -->
     <title>ZAPLACE AI - Next-Gen Smart Marketplace & AI Needs Analyzer</title>
-    <meta name="title" content="ZAPLACE AI - Next-Gen Smart Marketplace & AI Needs Analyzer">
-    <meta name="description" content="Marketplace pintar berbasis AI pertama yang menganalisis masalah otomotif, skincare, dan fashion kamu untuk memberikan paket rekomendasi produk presisi.">
-    <meta name="keywords" content="ZAPLACE AI, marketplace AI, rekomendasi produk AI, sparepart otomotif, skincare terbaik, OOTD fashion, e-commerce indonesia">
+    <meta name="description" content="Marketplace pintar berbasis AI pertama yang menganalisis masalah otomotif, skincare, dan fashion kamu untuk memberikan rekomendasi produk presisi.">
+    <meta name="keywords" content="ZAPLACE AI, marketplace AI, rekomendasi produk AI, sparepart otomotif, skincare terbaik, OOTD fashion">
     <meta name="robots" content="index, follow">
     <meta name="author" content="Mirza Rifqi">
     <link rel="canonical" href="https://jackma2310.github.io/Marketplace_NGM/">
 
-    <!-- Open Graph / Facebook / WhatsApp Preview SEO -->
+    <!-- Open Graph SEO -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://jackma2310.github.io/Marketplace_NGM/">
     <meta property="og:title" content="ZAPLACE AI - Ceritakan Masalahmu, AI Racik Solusinya">
     <meta property="og:description" content="Belanja tanpa bingung. AI Needs Analyzer siap bantu cari kebutuhan sparepart, skincare, dan fashion kamu.">
     <meta property="og:image" content="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=1200&q=80">
-
-    <!-- Schema.org Structured Data (JSON-LD for Google SEO) -->
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "WebSite",
-      "name": "ZAPLACE AI Marketplace",
-      "url": "https://jackma2310.github.io/Marketplace_NGM/",
-      "potentialAction": {
-        "@type": "SearchAction",
-        "target": "https://jackma2310.github.io/Marketplace_NGM/?q={search_term_string}",
-        "query-input": "required name=search_term_string"
-      }
-    }
-    </script>
 
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -55,26 +39,26 @@
                             950: '#070a0f',
                             900: '#0b0f17',
                             800: '#111827',
-                            700: '#1f2937',
-                            600: '#374151'
+                            700: '#1f2937'
                         }
                     },
                     fontFamily: {
                         sans: ['Plus Jakarta Sans', 'sans-serif'],
-                        display: ['Space Grotesk', 'sans-serif'],
+                        display: ['Space Grotesk', 'sans-serif']
                     },
                     animation: {
-                        'pulse-glow': 'pulseGlow 2.5s infinite',
-                        'float': 'float 4s ease-in-out infinite',
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'float': 'float 6s ease-in-out infinite',
+                        'glow': 'glow 2s ease-in-out infinite alternate',
                     },
                     keyframes: {
-                        pulseGlow: {
-                            '0%, 100%': { boxShadow: '0 0 15px rgba(52, 211, 153, 0.2)' },
-                            '50%': { boxShadow: '0 0 35px rgba(52, 211, 153, 0.6)' },
-                        },
                         float: {
                             '0%, 100%': { transform: 'translateY(0px)' },
-                            '50%': { transform: 'translateY(-8px)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        },
+                        glow: {
+                            '0%': { opacity: '0.4', filter: 'drop-shadow(0 0 15px rgba(52,211,153,0.3))' },
+                            '100%': { opacity: '0.8', filter: 'drop-shadow(0 0 30px rgba(52,211,153,0.6))' }
                         }
                     }
                 }
@@ -82,27 +66,30 @@
         }
     </script>
 
-    <!-- FontAwesome, Animate.css, & Fonts -->
+    <!-- FontAwesome Icons & Fonts -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
     
-    <!-- Vue 3 CDN -->
+    <!-- Vue 3 & Supabase SDK -->
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; cursor: default; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
         h1, h2, h3, .font-display { font-family: 'Space Grotesk', sans-serif; }
-        
-        /* Custom Glassmorphism UI */
         .glass-panel {
             background: rgba(17, 24, 39, 0.75);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
             border: 1px solid rgba(255, 255, 255, 0.08);
         }
-        
-        /* Custom Interactive Cursor Glow */
+        .glass-card {
+            background: rgba(11, 15, 23, 0.6);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
         .custom-cursor {
             pointer-events: none;
             position: fixed;
@@ -114,77 +101,67 @@
             transform: translate(-50%, -50%);
             transition: width 0.2s, height 0.2s, background-color 0.2s;
             z-index: 9999;
-            backdrop-filter: blur(2px);
         }
         .custom-cursor.hovered {
             width: 48px; height: 48px;
             background: rgba(52, 211, 153, 0.15);
-            border: 1.5px dashed rgba(52, 211, 153, 0.9);
+            border-color: rgba(52, 211, 153, 1);
         }
-
-        /* Hover Tilt & Card Animations */
         .product-card {
             transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
         }
         .product-card:hover {
-            transform: translateY(-6px) scale(1.01);
+            transform: translateY(-8px) scale(1.01);
             border-color: rgba(52, 211, 153, 0.4);
-            box-shadow: 0 20px 30px -10px rgba(0, 0, 0, 0.5), 0 0 20px rgba(52, 211, 153, 0.15);
+            box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.7), 0 0 25px -5px rgba(52, 211, 153, 0.15);
         }
-
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #070a0f; }
-        ::-webkit-scrollbar-thumb { background: #1f2937; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #10b981; }
     </style>
 </head>
-<body class="bg-dark-950 text-slate-100 min-h-screen selection:bg-brand-500 selection:text-white relative overflow-x-hidden" id="app">
+<body class="bg-dark-950 text-slate-100 min-h-screen relative overflow-x-hidden selection:bg-brand-500 selection:text-dark-950" id="app">
 
-    <!-- Custom Animated Cursor Follower -->
+    <!-- Custom Animated Cursor -->
     <div class="custom-cursor hidden md:block" :class="{ 'hovered': isCursorHovered }" :style="{ left: cursorX + 'px', top: cursorY + 'px' }"></div>
 
+    <!-- Background Animated Mesh Glow -->
+    <div class="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+        <div class="absolute -top-40 -left-40 w-96 h-96 bg-brand-500/10 rounded-full blur-3xl animate-pulse-slow"></div>
+        <div class="absolute top-1/3 -right-40 w-96 h-96 bg-indigo-600/10 rounded-full blur-3xl animate-pulse-slow" style="animation-delay: 2s;"></div>
+        <div class="absolute -bottom-40 left-1/3 w-96 h-96 bg-teal-500/10 rounded-full blur-3xl animate-pulse-slow" style="animation-delay: 4s;"></div>
+    </div>
+
     <!-- NAVBAR -->
-    <header class="sticky top-0 z-40 glass-panel border-b border-slate-800/80 transition-all">
+    <header class="sticky top-0 z-40 glass-panel border-b border-slate-800/80">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
-            <!-- Logo -->
-            <div class="flex items-center gap-3 cursor-pointer group" @click="resetFilters" @mouseenter="isCursorHovered = true" @mouseleave="isCursorHovered = false">
-                <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-brand-500 via-emerald-400 to-indigo-600 flex items-center justify-center text-white shadow-lg shadow-brand-500/25 group-hover:rotate-12 transition-transform duration-300">
+            <!-- Brand Logo -->
+            <div class="flex items-center gap-3 cursor-pointer" @click="resetFilter" @mouseenter="isCursorHovered = true" @mouseleave="isCursorHovered = false">
+                <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-brand-500 via-teal-500 to-indigo-600 flex items-center justify-center text-white shadow-lg shadow-brand-500/20">
                     <i class="fa-solid fa-bolt-lightning text-xl animate-pulse"></i>
                 </div>
                 <div>
-                    <span class="font-display font-bold text-2xl tracking-tight text-white flex items-center gap-1.5">
-                        ZAPLACE<span class="text-brand-400">AI</span>
-                    </span>
-                    <span class="text-[10px] text-slate-400 font-semibold tracking-widest uppercase block -mt-1">Smart Solution Engine</span>
+                    <span class="font-display font-bold text-2xl tracking-tight text-white">ZAPLACE<span class="text-brand-400">AI</span></span>
+                    <span class="text-[10px] text-slate-400 font-semibold uppercase tracking-widest block -mt-1">Smart Solution Engine</span>
                 </div>
             </div>
 
-            <!-- Search Bar AI Intent -->
-            <div class="flex-1 max-w-xl relative hidden md:block">
-                <div class="relative">
-                    <i class="fa-solid fa-robot absolute left-4 top-1/2 -translate-y-1/2 text-brand-400 animate-bounce"></i>
-                    <input type="text" v-model="searchQuery" @keyup.enter="openQuizWithSearch"
-                           @mouseenter="isCursorHovered = true" @mouseleave="isCursorHovered = false"
-                           placeholder="Coba ketik keluhan: 'Oli hrv', 'Skin barrier rusak', 'OOTD Kondangan'..." 
-                           class="w-full bg-dark-900/90 border border-slate-700/80 rounded-2xl pl-11 pr-32 py-2.5 text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:border-brand-400 focus:ring-2 focus:ring-brand-400/20 transition">
-                    <button @click="openQuizWithSearch" @mouseenter="isCursorHovered = true" @mouseleave="isCursorHovered = false" class="absolute right-1.5 top-1/2 -translate-y-1/2 bg-brand-500 hover:bg-brand-600 text-dark-950 font-bold px-3.5 py-1.5 rounded-xl text-xs flex items-center gap-1.5 transition shadow-md shadow-brand-500/20">
-                        <i class="fa-solid fa-wand-magic-sparkles"></i> AI Analyze
-                    </button>
-                </div>
+            <!-- Global Search Bar -->
+            <div class="hidden md:flex flex-1 max-w-md mx-8 relative">
+                <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 text-sm"></i>
+                <input type="text" v-model="searchQuery" placeholder="Cari masalah (misal: rem bunyi, muka kering, kemeja santai)..." 
+                    class="w-full bg-dark-900/90 border border-slate-800 rounded-2xl pl-11 pr-4 py-2.5 text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition">
             </div>
 
-            <!-- Action Buttons -->
+            <!-- Actions -->
             <div class="flex items-center gap-3">
-                <button @click="openAnalyzerModal()" @mouseenter="isCursorHovered = true" @mouseleave="isCursorHovered = false" class="bg-gradient-to-r from-brand-500 to-emerald-500 hover:brightness-110 text-dark-950 font-extrabold px-4 py-2.5 rounded-2xl text-sm flex items-center gap-2 shadow-lg shadow-brand-500/25 transition animate-pulse-glow">
-                    <i class="fa-solid fa-brain-circuit"></i>
-                    <span class="hidden sm:inline">AI Needs Analyzer</span>
+                <button @click="isAnalyzerOpen = true" @mouseenter="isCursorHovered = true" @mouseleave="isCursorHovered = false"
+                    class="hidden sm:flex items-center gap-2 bg-gradient-to-r from-brand-500 to-teal-600 hover:from-brand-400 hover:to-teal-500 text-dark-950 font-extrabold text-xs px-4 py-2.5 rounded-2xl shadow-lg shadow-brand-500/20 transition transform hover:scale-105">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i>
+                    <span>AI Needs Analyzer</span>
                 </button>
 
-                <!-- Cart Button -->
-                <button @click="isCartOpen = true" @mouseenter="isCursorHovered = true" @mouseleave="isCursorHovered = false" class="relative p-2.5 rounded-2xl bg-dark-900 border border-slate-700 text-slate-300 hover:text-white transition group">
-                    <i class="fa-solid fa-bag-shopping text-lg group-hover:scale-110 transition"></i>
-                    <span v-if="cartTotalCount > 0" class="absolute -top-1.5 -right-1.5 bg-brand-400 text-dark-950 text-xs font-black w-5 h-5 rounded-full flex items-center justify-center animate-bounce">
+                <button @click="isCartOpen = true" @mouseenter="isCursorHovered = true" @mouseleave="isCursorHovered = false"
+                    class="relative p-2.5 rounded-2xl bg-dark-900 border border-slate-800 text-slate-300 hover:text-white hover:border-slate-700 transition">
+                    <i class="fa-solid fa-bag-shopping text-lg"></i>
+                    <span v-if="cartTotalCount > 0" class="absolute -top-1.5 -right-1.5 bg-brand-400 text-dark-950 text-xs font-black w-5 h-5 rounded-full flex items-center justify-center shadow-lg shadow-brand-400/30 animate-bounce">
                         {{ cartTotalCount }}
                     </span>
                 </button>
@@ -193,349 +170,198 @@
     </header>
 
     <!-- HERO SECTION -->
-    <section class="relative py-14 md:py-24 overflow-hidden">
-        <!-- Ambient Glow Elements -->
-        <div class="absolute -top-40 -right-40 w-96 h-96 bg-brand-500/15 rounded-full blur-3xl pointer-events-none animate-float"></div>
-        <div class="absolute top-40 -left-40 w-96 h-96 bg-indigo-500/15 rounded-full blur-3xl pointer-events-none animate-float" style="animation-delay: 2s;"></div>
+    <section class="relative z-10 pt-12 pb-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-brand-500/10 border border-brand-500/20 text-brand-400 text-xs font-semibold mb-6 animate-float">
+            <span class="w-2 h-2 rounded-full bg-brand-400 animate-ping"></span>
+            ZAPLACE AI 2.0 • Autonomous Recommendation & Supabase Engine
+        </div>
 
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
-            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-brand-500/10 border border-brand-500/30 text-brand-400 text-xs font-bold uppercase tracking-widest mb-6 animate__animated animate__fadeInDown">
-                <i class="fa-solid fa-sparkles text-amber-400"></i> Next-Gen Problem-Based Shopping
-            </div>
-            
-            <h1 class="text-4xl sm:text-6xl md:text-7xl font-extrabold text-white tracking-tight leading-tight max-w-5xl mx-auto mb-6 animate__animated animate__fadeInUp">
-                Jangan Bingung Pilih Barang.<br>
-                <span class="bg-gradient-to-r from-brand-400 via-emerald-300 to-indigo-400 bg-clip-text text-transparent">
-                    Tuliskan Masalahmu, AI Racik Solusinya.
-                </span>
-            </h1>
+        <h1 class="text-4xl sm:text-6xl font-extrabold text-white tracking-tight leading-tight max-w-4xl mx-auto mb-6">
+            Ceritakan Masalahmu, <br><span class="bg-gradient-to-r from-brand-400 via-teal-300 to-indigo-400 bg-clip-text text-transparent">AI Racik Solusinya.</span>
+        </h1>
 
-            <p class="text-slate-400 text-base md:text-xl max-w-3xl mx-auto mb-10 leading-relaxed animate__animated animate__fadeInUp animate__delay-1s">
-                Gak perlu pusing hafalin nama sparepart, jenis bahan aktif skincare, atau kode fashion. ZAPLACE AI menganalisis gejala & situasi kamu secara presisi.
-            </p>
+        <p class="text-sm sm:text-base text-slate-400 max-w-2xl mx-auto mb-8 leading-relaxed">
+            Sistem e-commerce masa depan. Bantuan instan untuk masalah <span class="text-slate-200 font-semibold">Otomotif</span>, <span class="text-slate-200 font-semibold">Skincare</span>, dan <span class="text-slate-200 font-semibold">Fashion</span> tanpa kebingungan memilah ratusan produk.
+        </p>
 
-            <!-- Interactive Category Selector Pills -->
-            <div class="flex flex-wrap items-center justify-center gap-3 md:gap-4 animate__animated animate__fadeInUp animate__delay-1s">
-                <button @click="openAnalyzerModal('automotive')" @mouseenter="isCursorHovered = true" @mouseleave="isCursorHovered = false" class="glass-panel hover:bg-slate-800/80 border-slate-700 px-6 py-3.5 rounded-2xl flex items-center gap-3 text-sm font-bold text-slate-200 transition group hover:border-brand-400/60 shadow-lg">
-                    <span class="w-9 h-9 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-400 flex items-center justify-center group-hover:scale-110 transition">
-                        <i class="fa-solid fa-car-side"></i>
-                    </span>
-                    Otomotif & Sparepart
-                </button>
+        <!-- Category Pills -->
+        <div class="flex flex-wrap justify-center gap-3 max-w-xl mx-auto mb-10">
+            <button @click="selectedCategory = 'all'" 
+                :class="selectedCategory === 'all' ? 'bg-brand-500 text-dark-950 font-bold border-brand-400' : 'bg-dark-900 text-slate-400 border-slate-800 hover:border-slate-700'"
+                class="px-5 py-2.5 rounded-2xl text-xs border transition flex items-center gap-2">
+                <i class="fa-solid fa-border-all"></i> Semua Produk
+            </button>
+            <button @click="selectedCategory = 'automotive'" 
+                :class="selectedCategory === 'automotive' ? 'bg-brand-500 text-dark-950 font-bold border-brand-400' : 'bg-dark-900 text-slate-400 border-slate-800 hover:border-slate-700'"
+                class="px-5 py-2.5 rounded-2xl text-xs border transition flex items-center gap-2">
+                <i class="fa-solid fa-car-side"></i> Otomotif
+            </button>
+            <button @click="selectedCategory = 'skincare'" 
+                :class="selectedCategory === 'skincare' ? 'bg-brand-500 text-dark-950 font-bold border-brand-400' : 'bg-dark-900 text-slate-400 border-slate-800 hover:border-slate-700'"
+                class="px-5 py-2.5 rounded-2xl text-xs border transition flex items-center gap-2">
+                <i class="fa-solid fa-pump-soap"></i> Skincare
+            </button>
+            <button @click="selectedCategory = 'fashion'" 
+                :class="selectedCategory === 'fashion' ? 'bg-brand-500 text-dark-950 font-bold border-brand-400' : 'bg-dark-900 text-slate-400 border-slate-800 hover:border-slate-700'"
+                class="px-5 py-2.5 rounded-2xl text-xs border transition flex items-center gap-2">
+                <i class="fa-solid fa-shirt"></i> Fashion
+            </button>
+        </div>
+    </section>
 
-                <button @click="openAnalyzerModal('skincare')" @mouseenter="isCursorHovered = true" @mouseleave="isCursorHovered = false" class="glass-panel hover:bg-slate-800/80 border-slate-700 px-6 py-3.5 rounded-2xl flex items-center gap-3 text-sm font-bold text-slate-200 transition group hover:border-brand-400/60 shadow-lg">
-                    <span class="w-9 h-9 rounded-xl bg-pink-500/10 border border-pink-500/20 text-pink-400 flex items-center justify-center group-hover:scale-110 transition">
-                        <i class="fa-solid fa-heart-pulse"></i>
-                    </span>
-                    Skincare & Kesehatan
-                </button>
-
-                <button @click="openAnalyzerModal('fashion')" @mouseenter="isCursorHovered = true" @mouseleave="isCursorHovered = false" class="glass-panel hover:bg-slate-800/80 border-slate-700 px-6 py-3.5 rounded-2xl flex items-center gap-3 text-sm font-bold text-slate-200 transition group hover:border-brand-400/60 shadow-lg">
-                    <span class="w-9 h-9 rounded-xl bg-purple-500/10 border border-purple-500/20 text-purple-400 flex items-center justify-center group-hover:scale-110 transition">
-                        <i class="fa-solid fa-shirt"></i>
-                    </span>
-                    Fashion & OOTD
+    <!-- AI ANALYZER BANNER / TRIGGER CARD -->
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
+        <div class="glass-panel rounded-3xl p-6 sm:p-8 relative overflow-hidden border-brand-500/20 bg-gradient-to-r from-dark-900 via-dark-900 to-brand-900/20">
+            <div class="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6">
+                <div>
+                    <span class="text-brand-400 text-xs font-bold uppercase tracking-widest block mb-2"><i class="fa-solid fa-sparkles mr-1"></i> Interactive Needs Quiz</span>
+                    <h3 class="text-2xl font-bold text-white mb-2">Bingung pilih sparepart, skincare, atau outfit?</h3>
+                    <p class="text-xs text-slate-400 max-w-xl">Biarkan AI Analyzer mendiagnosis kondisi dan memberikan racikan rekomendasi produk yang paling tepat untukmu.</p>
+                </div>
+                <button @click="isAnalyzerOpen = true" class="w-full md:w-auto bg-brand-500 hover:bg-brand-400 text-dark-950 font-extrabold text-xs px-6 py-3.5 rounded-2xl shadow-lg shadow-brand-500/25 transition flex items-center justify-center gap-2 whitespace-nowrap">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i>
+                    <span>Mulai Konsultasi AI</span>
                 </button>
             </div>
         </div>
     </section>
 
-    <!-- AI RECOMMENDATION RESULT BUMPER -->
-    <section v-if="aiResult" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12 animate__animated animate__zoomIn">
-        <div class="glass-panel border-brand-500/50 rounded-3xl p-6 md:p-8 relative overflow-hidden shadow-2xl shadow-brand-500/10">
-            <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 pb-6 border-b border-slate-800">
-                <div class="flex items-start gap-4">
-                    <div class="w-14 h-14 rounded-2xl bg-brand-500/20 border border-brand-400/40 text-brand-400 flex items-center justify-center text-2xl shrink-0">
-                        <i class="fa-solid fa-brain-circuit"></i>
-                    </div>
-                    <div>
-                        <div class="flex items-center gap-2">
-                            <span class="text-xs font-extrabold uppercase tracking-widest text-brand-400">Diagnosis ZAPLACE AI Engine</span>
-                            <span class="text-[11px] bg-slate-800 text-brand-300 px-2.5 py-0.5 rounded-full border border-slate-700 font-bold">Akurasi Match 99.4%</span>
-                        </div>
-                        <h3 class="text-2xl font-bold text-white mt-1">Paket Solusi Rekomendasi</h3>
-                        <p class="text-slate-300 text-sm mt-1 max-w-3xl leading-relaxed">{{ aiResult.summary }}</p>
-                    </div>
-                </div>
-                <div class="flex items-center gap-3 shrink-0">
-                    <button @click="addAllRecommendedToCart" @mouseenter="isCursorHovered = true" @mouseleave="isCursorHovered = false" class="bg-brand-500 hover:bg-brand-600 text-dark-950 font-extrabold px-6 py-3 rounded-2xl text-sm flex items-center gap-2 transition shadow-lg shadow-brand-500/30">
-                        <i class="fa-solid fa-cart-plus text-base"></i> Ambil Paket Bundling ({{ formatRupiah(aiResultTotal) }})
-                    </button>
-                    <button @click="clearAiResult" class="p-3 text-slate-400 hover:text-white transition rounded-xl bg-dark-900 border border-slate-800">
-                        <i class="fa-solid fa-xmark text-lg"></i>
-                    </button>
-                </div>
-            </div>
-
-            <!-- AI Reason Breakdown -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
-                <div v-for="(reason, idx) in aiResult.reasons" :key="idx" class="bg-dark-900/90 border border-slate-800 rounded-2xl p-4 text-xs text-slate-300 flex items-start gap-3">
-                    <i class="fa-solid fa-circle-check text-brand-400 text-base mt-0.5"></i>
-                    <span class="leading-relaxed">{{ reason }}</span>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- MARKETPLACE PRODUCT CATALOG -->
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-24">
-        <!-- Catalog Controls -->
-        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
+    <!-- MAIN CATALOG GRID -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 mb-16">
+        <div class="flex items-center justify-between mb-8">
             <div>
-                <h2 class="text-3xl font-bold text-white flex items-center gap-3">
-                    Katalog Trending
-                    <span class="text-xs font-bold bg-brand-500/20 text-brand-400 border border-brand-500/30 px-3 py-1 rounded-full uppercase tracking-wider">Top Sales 2026</span>
-                </h2>
-                <p class="text-slate-400 text-sm mt-1">Produk terlaris dengan tingkat kepuasan ulasan tertinggi</p>
+                <h2 class="text-2xl font-bold text-white">Katalog Produk Presisi</h2>
+                <p class="text-xs text-slate-400 mt-1">Terhubung langsung dengan Database Supabase Live</p>
             </div>
+            <button @click="fetchProductsFromSupabase" class="text-xs bg-dark-900 text-slate-300 px-4 py-2 rounded-xl border border-slate-800 hover:border-brand-400 flex items-center gap-2 transition">
+                <i class="fa-solid fa-rotate-right" :class="{ 'fa-spin': isLoading }"></i>
+                <span>Refresh Data</span>
+            </button>
+        </div>
 
-            <!-- Category Filter Pills -->
-            <div class="flex flex-wrap items-center gap-2">
-                <button @click="selectedCategory = 'all'" :class="selectedCategory === 'all' ? 'bg-brand-500 text-dark-950 font-bold' : 'bg-dark-900 text-slate-300 hover:bg-slate-800 border border-slate-800'" class="px-4 py-2 rounded-xl text-xs transition">
-                    Semua Produk
-                </button>
-                <button @click="selectedCategory = 'automotive'" :class="selectedCategory === 'automotive' ? 'bg-brand-500 text-dark-950 font-bold' : 'bg-dark-900 text-slate-300 hover:bg-slate-800 border border-slate-800'" class="px-4 py-2 rounded-xl text-xs transition flex items-center gap-1.5">
-                    <i class="fa-solid fa-car-side"></i> Otomotif
-                </button>
-                <button @click="selectedCategory = 'skincare'" :class="selectedCategory === 'skincare' ? 'bg-brand-500 text-dark-950 font-bold' : 'bg-dark-900 text-slate-300 hover:bg-slate-800 border border-slate-800'" class="px-4 py-2 rounded-xl text-xs transition flex items-center gap-1.5">
-                    <i class="fa-solid fa-heart-pulse"></i> Skincare
-                </button>
-                <button @click="selectedCategory = 'fashion'" :class="selectedCategory === 'fashion' ? 'bg-brand-500 text-dark-950 font-bold' : 'bg-dark-900 text-slate-300 hover:bg-slate-800 border border-slate-800'" class="px-4 py-2 rounded-xl text-xs transition flex items-center gap-1.5">
-                    <i class="fa-solid fa-shirt"></i> Fashion
-                </button>
-            </div>
+        <!-- Loading State -->
+        <div v-if="isLoading" class="text-center py-20">
+            <i class="fa-solid fa-circle-notch fa-spin text-3xl text-brand-400 mb-3 block"></i>
+            <span class="text-slate-400 text-xs">Memuat data produk dari Supabase...</span>
         </div>
 
         <!-- Products Grid -->
-        <div v-if="filteredProducts.length === 0" class="text-center py-20 bg-dark-900/50 rounded-3xl border border-slate-800">
-            <i class="fa-solid fa-box-open text-5xl text-slate-600 mb-4 block"></i>
-            <p class="text-slate-400 text-base">Tidak ada produk yang cocok dengan pencarian Anda.</p>
-            <button @click="resetFilters" class="mt-4 text-xs bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold px-5 py-2.5 rounded-xl transition">Reset Pencarian</button>
-        </div>
-
-        <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            <div v-for="product in filteredProducts" :key="product.id" class="product-card glass-panel rounded-3xl overflow-hidden border-slate-800/80 flex flex-col justify-between group">
+        <div v-else-if="filteredProducts.length > 0" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <div v-for="product in filteredProducts" :key="product.id" 
+                class="product-card glass-panel rounded-3xl overflow-hidden border-slate-800/80 flex flex-col justify-between"
+                @mouseenter="isCursorHovered = true" @mouseleave="isCursorHovered = false">
                 <div>
-                    <!-- Product Image Container -->
+                    <!-- Product Image -->
                     <div class="relative h-52 bg-dark-900 overflow-hidden">
-                        <img :src="product.image" :alt="product.name" class="w-full h-full object-cover group-hover:scale-110 transition duration-700">
-                        
-                        <!-- AI Match Badge -->
-                        <div v-if="isAiRecommended(product.id)" class="absolute top-3 left-3 bg-brand-500 text-dark-950 font-black text-[10px] px-3 py-1 rounded-full uppercase tracking-wider backdrop-blur-md shadow-lg flex items-center gap-1 animate-pulse">
-                            <i class="fa-solid fa-wand-magic-sparkles"></i> AI Best Match
-                        </div>
-
-                        <!-- Rating Badge -->
-                        <div class="absolute top-3 right-3 bg-dark-950/80 backdrop-blur-md text-slate-200 text-xs font-bold px-2.5 py-1 rounded-xl border border-slate-700/80 flex items-center gap-1">
-                            <i class="fa-solid fa-star text-amber-400 text-[10px]"></i> {{ product.rating }}
-                        </div>
-
-                        <!-- Sales Count Badge -->
-                        <div class="absolute bottom-3 left-3 bg-dark-950/70 backdrop-blur-md text-slate-400 text-[10px] font-semibold px-2.5 py-0.5 rounded-md">
-                            Terjual {{ product.sales }}
+                        <img :src="product.image" :alt="product.name" class="w-full h-full object-cover transition duration-500 hover:scale-110">
+                        <div class="absolute top-3 right-3 bg-dark-950/80 backdrop-blur-md text-slate-200 text-[11px] font-bold px-2.5 py-1 rounded-xl border border-slate-800 flex items-center gap-1">
+                            <i class="fa-solid fa-star text-amber-400 text-[10px]"></i> {{ product.rating || '4.9' }}
                         </div>
                     </div>
-
-                    <!-- Content Body -->
+                    <!-- Product Details -->
                     <div class="p-5">
-                        <span class="text-[10px] font-extrabold text-brand-400 uppercase tracking-widest block mb-1">
-                            {{ getCategoryLabel(product.category) }}
-                        </span>
-
-                        <h3 class="text-base font-bold text-white mb-2 line-clamp-1 group-hover:text-brand-400 transition">
-                            {{ product.name }}
-                        </h3>
-
-                        <p class="text-xs text-slate-400 line-clamp-2 mb-4 leading-relaxed">
-                            {{ product.description }}
-                        </p>
-
-                        <!-- AI Spec Badge -->
-                        <div class="bg-dark-950/80 border border-slate-800 rounded-xl p-2.5 text-[11px] text-slate-300 flex items-center gap-2">
-                            <i class="fa-solid fa-microchip text-brand-400 shrink-0"></i>
-                            <span class="truncate">{{ product.aiSpec }}</span>
-                        </div>
+                        <span class="text-[10px] font-extrabold text-brand-400 uppercase tracking-widest block mb-1">{{ product.category }}</span>
+                        <h3 class="text-sm font-bold text-white mb-2 line-clamp-1 hover:text-brand-300 transition">{{ product.name }}</h3>
+                        <p class="text-xs text-slate-400 line-clamp-2 mb-4 leading-relaxed">{{ product.description }}</p>
                     </div>
                 </div>
 
-                <!-- Footer Price & Buy -->
+                <!-- Footer Card -->
                 <div class="p-5 pt-0 border-t border-slate-800/60 mt-auto flex items-center justify-between">
                     <div>
-                        <span class="text-[10px] text-slate-500 uppercase font-bold block">Harga</span>
-                        <span class="text-base font-extrabold text-white">{{ formatRupiah(product.price) }}</span>
+                        <span class="text-[9px] text-slate-500 uppercase font-extrabold block">Harga</span>
+                        <span class="text-sm font-extrabold text-white">{{ formatRupiah(product.price) }}</span>
                     </div>
-
-                    <button @click="addToCart(product)" @mouseenter="isCursorHovered = true" @mouseleave="isCursorHovered = false" class="bg-slate-800 hover:bg-brand-500 hover:text-dark-950 text-slate-200 p-3 rounded-2xl transition flex items-center justify-center shadow-md">
-                        <i class="fa-solid fa-cart-plus text-sm"></i>
+                    <button @click="addToCart(product)" class="bg-dark-900 hover:bg-brand-500 hover:text-dark-950 border border-slate-800 text-slate-200 p-3 rounded-2xl transition shadow-lg">
+                        <i class="fa-solid fa-cart-plus text-xs"></i>
                     </button>
                 </div>
             </div>
+        </div>
+
+        <div v-else class="text-center py-20 text-slate-500">
+            <i class="fa-solid fa-box-open text-4xl mb-3 block"></i>
+            Tidak ada produk ditemukan.
         </div>
     </main>
 
-    <!-- AI NEEDS ANALYZER MODAL (QUIZ WIDGET) -->
-    <div v-if="isAnalyzerOpen" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-dark-950/85 backdrop-blur-md animate__animated animate__fadeIn">
-        <div class="glass-panel border-slate-700 rounded-3xl max-w-2xl w-full p-6 md:p-8 relative overflow-hidden shadow-2xl">
-            <button @click="closeAnalyzerModal" class="absolute top-6 right-6 text-slate-400 hover:text-white transition">
+    <!-- AI ANALYZER MODAL -->
+    <div v-if="isAnalyzerOpen" class="fixed inset-0 z-50 overflow-y-auto bg-dark-950/80 backdrop-blur-md flex items-center justify-center p-4">
+        <div class="glass-panel w-full max-w-2xl rounded-3xl border-slate-800 p-6 sm:p-8 relative">
+            <button @click="isAnalyzerOpen = false" class="absolute top-6 right-6 text-slate-400 hover:text-white">
                 <i class="fa-solid fa-xmark text-xl"></i>
             </button>
 
-            <!-- Step 1: Select Category -->
-            <div v-if="quizStep === 1">
-                <div class="flex items-center gap-2 text-brand-400 text-xs font-bold uppercase tracking-wider mb-2">
-                    <i class="fa-solid fa-sparkles"></i> Langkah 1 dari 2
+            <div class="flex items-center gap-3 mb-6">
+                <div class="w-10 h-10 rounded-2xl bg-brand-500/10 border border-brand-500/20 flex items-center justify-center text-brand-400">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i>
                 </div>
-                <h2 class="text-2xl font-bold text-white mb-2">Pilih Kategori Kebutuhan Anda</h2>
-                <p class="text-slate-400 text-sm mb-6">ZAPLACE AI akan menyesuaikan rekomendasi produk secara presisi.</p>
-
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
-                    <button @click="quizCategory = 'automotive'; quizStep = 2" class="p-5 rounded-2xl bg-dark-900 border border-slate-800 hover:border-brand-400 text-left transition group">
-                        <div class="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center text-xl mb-3 group-hover:scale-110 transition">
-                            <i class="fa-solid fa-car-side"></i>
-                        </div>
-                        <h4 class="font-bold text-white text-sm mb-1">Otomotif</h4>
-                        <p class="text-[11px] text-slate-400">Analisa sparepart & minyak mesin</p>
-                    </button>
-
-                    <button @click="quizCategory = 'skincare'; quizStep = 2" class="p-5 rounded-2xl bg-dark-900 border border-slate-800 hover:border-brand-400 text-left transition group">
-                        <div class="w-10 h-10 rounded-xl bg-pink-500/10 text-pink-400 flex items-center justify-center text-xl mb-3 group-hover:scale-110 transition">
-                            <i class="fa-solid fa-heart-pulse"></i>
-                        </div>
-                        <h4 class="font-bold text-white text-sm mb-1">Skincare</h4>
-                        <p class="text-[11px] text-slate-400">Konsultasi tipe kulit & barrier</p>
-                    </button>
-
-                    <button @click="quizCategory = 'fashion'; quizStep = 2" class="p-5 rounded-2xl bg-dark-900 border border-slate-800 hover:border-brand-400 text-left transition group">
-                        <div class="w-10 h-10 rounded-xl bg-purple-500/10 text-purple-400 flex items-center justify-center text-xl mb-3 group-hover:scale-110 transition">
-                            <i class="fa-solid fa-shirt"></i>
-                        </div>
-                        <h4 class="font-bold text-white text-sm mb-1">Fashion</h4>
-                        <p class="text-[11px] text-slate-400">Rekomendasi OOTD & styling</p>
-                    </button>
+                <div>
+                    <h3 class="text-lg font-bold text-white">AI Needs Analyzer Engine</h3>
+                    <p class="text-xs text-slate-400">Pilih kategori dan ceritakan masalahmu</p>
                 </div>
             </div>
 
-            <!-- Step 2: Problem Input -->
-            <div v-if="quizStep === 2">
-                <div class="flex items-center justify-between mb-2">
-                    <span class="text-brand-400 text-xs font-bold uppercase tracking-wider">
-                        <i class="fa-solid fa-sparkles"></i> Langkah 2 dari 2 ({{ getCategoryLabel(quizCategory) }})
-                    </span>
-                    <button @click="quizStep = 1" class="text-xs text-slate-400 hover:text-white">Ganti Kategori</button>
-                </div>
-                
-                <h2 class="text-2xl font-bold text-white mb-2">Ceritakan Masalah atau Kebutuhanmu</h2>
-                <p class="text-slate-400 text-sm mb-6">Pilih salah satu contoh keluhan umum atau ketik rinciannya langsung.</p>
-
-                <!-- Presets -->
-                <div class="space-y-2 mb-6">
-                    <label class="text-xs font-semibold text-slate-300 block mb-1">Pilihan Situasi Populer:</label>
-                    <div v-if="quizCategory === 'automotive'" class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                        <button @click="quizInput = 'Rem Innova berdecit dan oli mesin sudah waktunya ganti'" class="text-left p-3 rounded-xl bg-dark-900 border border-slate-800 hover:border-brand-400 text-xs text-slate-300 transition">
-                            🚗 Rem Innova berdecit & butuh oli mesin
-                        </button>
-                        <button @click="quizInput = 'Butuh dashcam perekam depan belakang yang jernih malam hari'" class="text-left p-3 rounded-xl bg-dark-900 border border-slate-800 hover:border-brand-400 text-xs text-slate-300 transition">
-                            📷 Dashcam mobil night-vision jernih
-                        </button>
-                    </div>
-
-                    <div v-if="quizCategory === 'skincare'" class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                        <button @click="quizInput = 'Skin barrier mengelupas, butuh cleanser & pelembab lembut'" class="text-left p-3 rounded-xl bg-dark-900 border border-slate-800 hover:border-brand-400 text-xs text-slate-300 transition">
-                            🧴 Skin barrier rusak & mengelupas
-                        </button>
-                        <button @click="quizInput = 'Kulit kemerahan berjerawat, butuh toner soothing dan serum'" class="text-left p-3 rounded-xl bg-dark-900 border border-slate-800 hover:border-brand-400 text-xs text-slate-300 transition">
-                            ✨ Kulit kemerahan & jerawat beruntusan
-                        </button>
-                    </div>
-
-                    <div v-if="quizCategory === 'fashion'" class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                        <button @click="quizInput = 'Setelan OOTD Kondangan outdoor casual warna pastel sage'" class="text-left p-3 rounded-xl bg-dark-900 border border-slate-800 hover:border-brand-400 text-xs text-slate-300 transition">
-                            👔 Kondangan outdoor casual pastel
-                        </button>
-                        <button @click="quizInput = 'Style Vintage Streetwear kasual buat nongkrong malam'" class="text-left p-3 rounded-xl bg-dark-900 border border-slate-800 hover:border-brand-400 text-xs text-slate-300 transition">
-                            🧥 Streetwear Vintage Jaket & Loafers
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Custom Text Input -->
-                <div class="mb-6">
-                    <label class="text-xs font-semibold text-slate-300 block mb-1">Atau Tuliskan Rincian Masalah Anda:</label>
-                    <textarea v-model="quizInput" rows="3" placeholder="Tulis keluhanmu di sini secara bebas..." 
-                              class="w-full bg-dark-900 border border-slate-700 rounded-xl p-3 text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:border-brand-400 transition"></textarea>
-                </div>
-
-                <button @click="processAiAnalysis" :disabled="!quizInput.trim()" class="w-full bg-brand-500 hover:bg-brand-600 disabled:opacity-50 text-dark-950 font-extrabold py-3.5 rounded-xl text-sm flex items-center justify-center gap-2 transition">
-                    <i class="fa-solid fa-wand-magic-sparkles"></i> Analisis & Cari Solusi produk
+            <!-- Category Selector inside Modal -->
+            <div class="grid grid-cols-3 gap-3 mb-6">
+                <button @click="quizCategory = 'automotive'" :class="quizCategory === 'automotive' ? 'border-brand-400 bg-brand-500/10 text-brand-400' : 'border-slate-800 text-slate-400'" class="p-3 rounded-2xl border text-xs font-bold text-center">
+                    <i class="fa-solid fa-car-side block text-lg mb-1"></i> Otomotif
+                </button>
+                <button @click="quizCategory = 'skincare'" :class="quizCategory === 'skincare' ? 'border-brand-400 bg-brand-500/10 text-brand-400' : 'border-slate-800 text-slate-400'" class="p-3 rounded-2xl border text-xs font-bold text-center">
+                    <i class="fa-solid fa-pump-soap block text-lg mb-1"></i> Skincare
+                </button>
+                <button @click="quizCategory = 'fashion'" :class="quizCategory === 'fashion' ? 'border-brand-400 bg-brand-500/10 text-brand-400' : 'border-slate-800 text-slate-400'" class="p-3 rounded-2xl border text-xs font-bold text-center">
+                    <i class="fa-solid fa-shirt block text-lg mb-1"></i> Fashion
                 </button>
             </div>
 
-            <!-- Step 3: AI Processing Loader -->
-            <div v-if="quizStep === 3" class="text-center py-12">
-                <div class="relative w-20 h-20 mx-auto mb-6">
-                    <div class="absolute inset-0 rounded-full border-4 border-brand-500/20 border-t-brand-400 animate-spin"></div>
-                    <div class="absolute inset-0 flex items-center justify-center text-brand-400 text-2xl">
-                        <i class="fa-solid fa-brain-circuit"></i>
-                    </div>
-                </div>
-                <h3 class="text-xl font-bold text-white mb-2">ZAPLACE AI Sedang Menganalisis...</h3>
-                <p class="text-slate-400 text-sm max-w-md mx-auto">{{ aiProcessingStatus }}</p>
-            </div>
+            <textarea v-model="quizInput" rows="4" placeholder="Ceritakan detail masalahmu (contoh: Rem mobil Avanza bunyi berdecit saat hujan, atau muka kusam & kencang setelah cuci muka)..."
+                class="w-full bg-dark-900 border border-slate-800 rounded-2xl p-4 text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:border-brand-500 mb-6"></textarea>
+
+            <button @click="runAiAnalysis" class="w-full bg-brand-500 hover:bg-brand-400 text-dark-950 font-extrabold text-xs py-4 rounded-2xl transition shadow-lg shadow-brand-500/20 flex items-center justify-center gap-2">
+                <i class="fa-solid fa-brain"></i>
+                <span>Analisis & Racik Solusi Sekarang</span>
+            </button>
         </div>
     </div>
 
-    <!-- CART SLIDE-OVER DRAWER -->
-    <div v-if="isCartOpen" class="fixed inset-0 z-50 overflow-hidden bg-dark-950/80 backdrop-blur-sm animate__animated animate__fadeIn">
+    <!-- CART DRAWER -->
+    <div v-if="isCartOpen" class="fixed inset-0 z-50 overflow-hidden bg-dark-950/80 backdrop-blur-sm">
         <div class="absolute inset-y-0 right-0 max-w-full flex pl-10">
             <div class="w-screen max-w-md glass-panel border-l border-slate-800 p-6 flex flex-col justify-between">
                 <div>
                     <div class="flex items-center justify-between pb-4 border-b border-slate-800">
-                        <h3 class="text-lg font-bold text-white flex items-center gap-2">
-                            <i class="fa-solid fa-bag-shopping text-brand-400"></i> Keranjang Belanja
-                        </h3>
-                        <button @click="isCartOpen = false" class="text-slate-400 hover:text-white">
-                            <i class="fa-solid fa-xmark text-lg"></i>
-                        </button>
+                        <h3 class="text-lg font-bold text-white">Keranjang Belanja</h3>
+                        <button @click="isCartOpen = false" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
                     </div>
 
-                    <div v-if="cart.length === 0" class="text-center py-20">
-                        <i class="fa-solid fa-basket-shopping text-4xl text-slate-700 mb-3 block"></i>
-                        <p class="text-slate-400 text-sm">Keranjang belanja Anda masih kosong</p>
-                    </div>
-
-                    <div v-else class="space-y-4 my-6 max-h-[55vh] overflow-y-auto pr-1">
-                        <div v-for="item in cart" :key="item.id" class="bg-dark-900/90 border border-slate-800 rounded-2xl p-3.5 flex gap-3.5 items-center">
-                            <img :src="item.image" :alt="item.name" class="w-16 h-16 object-cover rounded-xl">
+                    <div v-if="cart.length === 0" class="text-center py-20 text-slate-500">Keranjang belanja Anda masih kosong</div>
+                    <div v-else class="space-y-4 my-6 max-h-[55vh] overflow-y-auto">
+                        <div v-for="item in cart" :key="item.id" class="bg-dark-900 border border-slate-800 rounded-2xl p-3 flex gap-3 items-center">
+                            <img :src="item.image" class="w-14 h-14 object-cover rounded-xl">
                             <div class="flex-1">
                                 <h4 class="text-xs font-bold text-white line-clamp-1">{{ item.name }}</h4>
                                 <span class="text-xs font-extrabold text-brand-400">{{ formatRupiah(item.price) }}</span>
-                                
-                                <div class="flex items-center gap-2 mt-2">
-                                    <button @click="updateQty(item.id, -1)" class="w-6 h-6 rounded-lg bg-slate-800 text-xs flex items-center justify-center text-slate-300 hover:bg-slate-700">-</button>
-                                    <span class="text-xs text-slate-200 font-bold px-1">{{ item.qty }}</span>
-                                    <button @click="updateQty(item.id, 1)" class="w-6 h-6 rounded-lg bg-slate-800 text-xs flex items-center justify-center text-slate-300 hover:bg-slate-700">+</button>
+                                <div class="flex items-center gap-2 mt-1">
+                                    <button @click="decreaseQty(item)" class="w-5 h-5 rounded bg-slate-800 text-xs flex items-center justify-center text-slate-300">-</button>
+                                    <span class="text-xs font-bold text-white">{{ item.qty }}</span>
+                                    <button @click="increaseQty(item)" class="w-5 h-5 rounded bg-slate-800 text-xs flex items-center justify-center text-slate-300">+</button>
                                 </div>
                             </div>
-                            <button @click="removeFromCart(item.id)" class="text-slate-500 hover:text-red-400 text-xs p-2">
-                                <i class="fa-solid fa-trash"></i>
-                            </button>
+                            <button @click="removeFromCart(item)" class="text-slate-500 hover:text-rose-400 p-2"><i class="fa-solid fa-trash text-xs"></i></button>
                         </div>
                     </div>
                 </div>
 
-                <!-- Footer Checkout Options -->
                 <div v-if="cart.length > 0" class="pt-4 border-t border-slate-800">
                     <div class="flex items-center justify-between mb-4">
-                        <span class="text-sm text-slate-400 font-semibold">Total Tagihan:</span>
+                        <span class="text-sm text-slate-400">Total Tagihan:</span>
                         <span class="text-2xl font-extrabold text-white">{{ formatRupiah(cartTotalPrice) }}</span>
                     </div>
 
-                    <div class="space-y-2.5">
-                        <button @click="checkoutViaWhatsApp" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3.5 rounded-2xl text-xs flex items-center justify-center gap-2 transition shadow-lg shadow-emerald-600/20">
-                            <i class="fa-brands fa-whatsapp text-lg"></i> Checkout WhatsApp (+62 813-1766-7785)
-                        </button>
-                        <button @click="checkoutViaMidtrans" class="w-full bg-brand-500 hover:bg-brand-600 text-dark-950 font-bold py-3.5 rounded-2xl text-xs flex items-center justify-center gap-2 transition">
-                            <i class="fa-solid fa-credit-card"></i> Bayar Instant (Midtrans Snap)
+                    <div class="space-y-2">
+                        <button @click="checkoutViaWhatsApp" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3.5 rounded-2xl text-xs flex items-center justify-center gap-2 transition">
+                            <i class="fa-brands fa-whatsapp"></i> Checkout WhatsApp (+62 813-1766-7785)
                         </button>
                     </div>
                 </div>
@@ -547,279 +373,109 @@
     <footer class="border-t border-slate-800/80 bg-dark-950 py-10">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-slate-500">
             <div class="flex items-center gap-2">
-                <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
-                <span>ZAPLACE AI System v2.0 • GitHub Pages & Cloudflare Edge Powered</span>
+                <span class="w-2.5 h-2.5 rounded-full bg-brand-400 animate-pulse"></span>
+                <span>ZAPLACE AI System v2.0 • GitHub Pages & Supabase Connected</span>
             </div>
             <div>
-                <span>&copy; 2026 ZAPLACE AI Marketplace. Designed for Precision Shopping.</span>
+                <span>&copy; 2026 ZAPLACE AI Marketplace. Designed by Mirza Rifqi.</span>
             </div>
         </div>
     </footer>
 
     <!-- VUE APPLICATION LOGIC -->
     <script>
-      
-     const SUPABASE_URL = 'https://rknxshonkrwcnrpuaxko.supabase.co';
-const SUPABASE_ANON_KEY = 'sb_publishable_6aNT_tp7RcnLmi5tMnCVQQ_67aYb...'; 
+        // Supabase Client Config
+        const SUPABASE_URL = 'https://rknxshonkrwcnrpuaxko.supabase.co';
+        const SUPABASE_ANON_KEY = 'sb_publishable_6aNT_tp7RcnLmi5tMnCVQQ_67aYb...'; // PASTIKAN PUBLISHABLE KEY LENGKAPMU DI SINI
+
+        let _supabase = null;
+        if (typeof supabase !== 'undefined' && SUPABASE_URL) {
+            _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        }
+
+        const { createApp } = Vue;
 
         createApp({
             data() {
                 return {
-                    cursorX: 0,
-                    cursorY: 0,
-                    isCursorHovered: false,
+                    cursorX: 0, cursorY: 0, isCursorHovered: false,
                     searchQuery: '',
                     selectedCategory: 'all',
                     isAnalyzerOpen: false,
                     isCartOpen: false,
                     quizCategory: 'automotive',
-                    quizStep: 1,
                     quizInput: '',
-                    aiProcessingStatus: 'Menghubungkan ke ZAPLACE AI Engine...',
-                    aiResult: null,
+                    isLoading: false,
                     cart: [],
-                    
-                    // High-Trending Product Catalog Data (Statistik Sales Terbanyak)
-                    products: [
-                        // Otomotif
-                        {
-                            id: 'auto-1',
-                            name: 'Kampas Rem Bendix General CT Front',
-                            category: 'automotive',
-                            price: 385000,
-                            rating: '4.9',
-                            sales: '1.8rb+',
-                            image: 'https://images.unsplash.com/photo-1486006920555-c77dce18193b?auto=format&fit=crop&w=600&q=80',
-                            description: 'Bebas bunyi berdecit saat hujan, teknologi Ceramic Hybrid ramah piringan cakram.',
-                            aiSpec: 'Kompatibel: Kijang Innova, Fortuner, HRV'
-                        },
-                        {
-                            id: 'auto-2',
-                            name: 'Oli Mesin Shell Helix HX8 5W-30 Synthetic (4L)',
-                            category: 'automotive',
-                            price: 435000,
-                            rating: '4.9',
-                            sales: '3.2rb+',
-                            image: 'https://images.unsplash.com/photo-1617814076367-b759c7d7e738?auto=format&fit=crop&w=600&q=80',
-                            description: 'Perlindungan mesin maksimal dari aus & panas tarikan berat perjalanan jauh.',
-                            aiSpec: 'Full Synthetic • Flexi Molecule Tech'
-                        },
-                        {
-                            id: 'auto-3',
-                            name: 'Dashcam Mobil BARDI Dual Camera Night Vision',
-                            category: 'automotive',
-                            price: 899000,
-                            rating: '4.8',
-                            sales: '950+',
-                            image: 'https://images.unsplash.com/photo-1508974239320-0a029497e820?auto=format&fit=crop&w=600&q=80',
-                            description: 'Kamera perekam depan & belakang 2K jernih rekaman malam hari dengan G-Sensor.',
-                            aiSpec: '2K QHD • Wifi App Control • G-Sensor'
-                        },
-
-                        // Skincare & Health
-                        {
-                            id: 'skin-1',
-                            name: 'Skintific 5X Ceramide Barrier Repair Moisture Gel',
-                            category: 'skincare',
-                            price: 139000,
-                            rating: '4.9',
-                            sales: '5.4rb+',
-                            image: 'https://images.unsplash.com/photo-1556228720-195a672e8a03?auto=format&fit=crop&w=600&q=80',
-                            description: 'Pelembab viral memperbaiki skin barrier rusak, mengunci kelembaban tanpa lengket.',
-                            aiSpec: '5X Ceramide • Hyaluronic Acid • Centella'
-                        },
-                        {
-                            id: 'skin-2',
-                            name: 'Anua Heartleaf 77% Soothing Toner',
-                            category: 'skincare',
-                            price: 219000,
-                            rating: '4.8',
-                            sales: '2.1rb+',
-                            image: 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&w=600&q=80',
-                            description: 'Meredakan kemerahan, jerawat beruntusan, dan menyegarkan kulit sensitif.',
-                            aiSpec: '77% Heartleaf Extract • pH Balanced'
-                        },
-                        {
-                            id: 'skin-3',
-                            name: 'Somethinc Low pH Gentle Gel Cleanser',
-                            category: 'skincare',
-                            price: 99000,
-                            rating: '4.9',
-                            sales: '4.8rb+',
-                            image: 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=600&q=80',
-                            description: 'Pembersih wajah pH seimbang aman untuk kulit terasa tertarik & sensitif.',
-                            aiSpec: 'Vegan • Gentle Barrier • Non-Comedogenic'
-                        },
-
-                        // Fashion & OOTD
-                        {
-                            id: 'fash-1',
-                            name: 'Kemeja Linen Premium Regular Fit Soft Sage',
-                            category: 'fashion',
-                            price: 249000,
-                            rating: '4.8',
-                            sales: '1.2rb+',
-                            image: 'https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=600&q=80',
-                            description: 'Bahan linen alami adem, potong rapi cocok untuk acara outdoor casual & meeting.',
-                            aiSpec: 'Breathable Linen • Soft Pastel Tone'
-                        },
-                        {
-                            id: 'fash-2',
-                            name: 'Celana Chino Ankle Cut Stretch Creams',
-                            category: 'fashion',
-                            price: 289000,
-                            rating: '4.9',
-                            sales: '2.5rb+',
-                            image: 'https://images.unsplash.com/photo-1479064555552-3ef4979f8908?auto=format&fit=crop&w=600&q=80',
-                            description: 'Potongan ankle pas di mata kaki dengan bahan fleksibel melengkapi penampilan.',
-                            aiSpec: 'Cotton Stretch • Versatile Mix Match'
-                        },
-                        {
-                            id: 'fash-3',
-                            name: 'Jaket Varsity Vintage Minimalis Black/Cream',
-                            category: 'fashion',
-                            price: 379000,
-                            rating: '4.8',
-                            sales: '870+',
-                            image: 'https://images.unsplash.com/photo-1551028719-00167b16eac5?auto=format&fit=crop&w=600&q=80',
-                            description: 'Style streetwear hangat dengan kombinasi fleece & wool sintetis premium.',
-                            aiSpec: 'Vintage Street Style • Heavyweight Wool'
-                        }
-                    ]
+                    products: []
                 }
             },
 
             mounted() {
-                // Tracking Kursor Animasi
                 window.addEventListener('mousemove', (e) => {
                     this.cursorX = e.clientX;
                     this.cursorY = e.clientY;
                 });
+
+                this.fetchProductsFromSupabase();
             },
 
             computed: {
                 filteredProducts() {
-                    return this.products.filter(product => {
-                        const matchCat = this.selectedCategory === 'all' || product.category === this.selectedCategory;
-                        const matchSearch = !this.searchQuery || 
-                            product.name.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
-                            product.description.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
-                            product.aiSpec.toLowerCase().includes(this.searchQuery.toLowerCase());
-                        return matchCat && matchSearch;
+                    return this.products.filter(p => {
+                        const matchCat = this.selectedCategory === 'all' || p.category === this.selectedCategory;
+                        const matchQuery = !this.searchQuery || p.name.toLowerCase().includes(this.searchQuery.toLowerCase()) || p.description.toLowerCase().includes(this.searchQuery.toLowerCase());
+                        return matchCat && matchQuery;
                     });
                 },
-
-                cartTotalCount() {
-                    return this.cart.reduce((total, item) => total + item.qty, 0);
+                cartTotalCount() { 
+                    return this.cart.reduce((total, item) => total + item.qty, 0); 
                 },
-
-                cartTotalPrice() {
-                    return this.cart.reduce((total, item) => total + (item.price * item.qty), 0);
-                },
-
-                aiResultTotal() {
-                    if (!this.aiResult || !this.aiResult.recommendedProductIds) return 0;
-                    return this.products
-                        .filter(p => this.aiResult.recommendedProductIds.includes(p.id))
-                        .reduce((total, p) => total + p.price, 0);
+                cartTotalPrice() { 
+                    return this.cart.reduce((total, item) => total + (item.price * item.qty), 0); 
                 }
             },
 
             methods: {
-                getCategoryLabel(cat) {
-                    const labels = {
-                        automotive: 'Otomotif & Parts',
-                        skincare: 'Skincare & Health',
-                        fashion: 'Fashion Style'
-                    };
-                    return labels[cat] || cat;
+                async fetchProductsFromSupabase() {
+                    this.isLoading = true;
+                    if (_supabase) {
+                        try {
+                            const { data, error } = await _supabase.from('products').select('*');
+                            if (!error && data && data.length > 0) {
+                                this.products = data;
+                            } else {
+                                this.loadFallbackProducts();
+                            }
+                        } catch (e) {
+                            this.loadFallbackProducts();
+                        }
+                    } else {
+                        this.loadFallbackProducts();
+                    }
+                    this.isLoading = false;
+                },
+
+                loadFallbackProducts() {
+                    this.products = [
+                        { id: '1', name: 'Kampas Rem Bendix General CT Front', category: 'automotive', price: 385000, rating: '4.9', image: 'https://images.unsplash.com/photo-1486006920555-c77dce18193b?auto=format&fit=crop&w=600&q=80', description: 'Ceramic Hybrid anti berdecit saat hujan.' },
+                        { id: '2', name: 'Oli Mesin Shell Helix HX8 5W-30 (4L)', category: 'automotive', price: 435000, rating: '4.9', image: 'https://images.unsplash.com/photo-1617814076367-b759c7d7e738?auto=format&fit=crop&w=600&q=80', description: 'Perlindungan mesin maksimal dari aus & panas.' },
+                        { id: '3', name: 'Skintific 5X Ceramide Moisture Gel', category: 'skincare', price: 139000, rating: '4.9', image: 'https://images.unsplash.com/photo-1556228720-195a672e8a03?auto=format&fit=crop&w=600&q=80', description: 'Memperbaiki skin barrier rusak, mengunci kelembaban.' },
+                        { id: '4', name: 'Kemeja Linen Premium Regular Fit Sage', category: 'fashion', price: 249000, rating: '4.8', image: 'https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=600&q=80', description: 'Bahan linen alami adem untuk outdoor casual.' }
+                    ];
+                },
+
+                resetFilter() {
+                    this.selectedCategory = 'all';
+                    this.searchQuery = '';
                 },
 
                 formatRupiah(num) {
-                    return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(num);
-                },
-
-                openAnalyzerModal(category = 'automotive') {
-                    this.quizCategory = category;
-                    this.quizStep = 1;
-                    this.quizInput = '';
-                    this.isAnalyzerOpen = true;
-                },
-
-                closeAnalyzerModal() {
-                    this.isAnalyzerOpen = false;
-                },
-
-                openQuizWithSearch() {
-                    if (this.searchQuery.trim()) {
-                        this.quizInput = this.searchQuery;
-                        this.quizCategory = 'automotive';
-                        this.quizStep = 2;
-                        this.isAnalyzerOpen = true;
-                    }
-                },
-
-                processAiAnalysis() {
-                    this.quizStep = 3;
-                    this.aiProcessingStatus = 'Menganalisis gejala & kompatibilitas...';
-
-                    setTimeout(() => {
-                        this.aiProcessingStatus = 'Mencocokkan produk trending di database...';
-                    }, 1000);
-
-                    setTimeout(() => {
-                        this.generateAiResult();
-                        this.isAnalyzerOpen = false;
-                    }, 2000);
-                },
-
-                generateAiResult() {
-                    if (this.quizCategory === 'automotive') {
-                        this.aiResult = {
-                            summary: `Berdasarkan keluhan ("${this.quizInput}"), sistem mendeteksi kebutuhan peremajaan rem & perlindungan mesin ekstra. Kami racikkan produk terlaris yang teruji cocok.`,
-                            reasons: [
-                                'Kampas rem Bendix Ceramic Hybrid melenyapkan bunyi berdecit basah.',
-                                'Oli Shell Helix HX8 Full Synthetic menjaga keawetan mesin perjalanan jauh.',
-                                'Tingkat ulasan kepuasan pengguna mencapai 4.9/5.0.'
-                            ],
-                            recommendedProductIds: ['auto-1', 'auto-2']
-                        };
-                        this.selectedCategory = 'automotive';
-                    } else if (this.quizCategory === 'skincare') {
-                        this.aiResult = {
-                            summary: `Diagnosis ZAPLACE AI merekomendasikan perbaikan skin barrier dan pembersihan tanpa iritasi. Kombinasi produk viral berkonsentrasi aman.`,
-                            reasons: [
-                                'Skintific 5X Ceramide mengunci kelembaban skin barrier mengelupas.',
-                                'Somethinc Gentle Cleanser memiliki pH seimbang ramah kulit sensitif.',
-                                'Bebas alkohol dan bahan komedogenik.'
-                            ],
-                            recommendedProductIds: ['skin-1', 'skin-3']
-                        };
-                        this.selectedCategory = 'skincare';
-                    } else {
-                        this.aiResult = {
-                            summary: `Paket OOTD Casual Modern pilihan AI. Perpaduan Kemeja Linen Soft Sage & Celana Chino Creams memberikan tampilan adem & stylish.`,
-                            reasons: [
-                                'Kemeja bahan Linen breathable sejuk untuk outdoor.',
-                                'Celana Chino Stretch potongan Ankle Cut membuat postur proporsional.',
-                                'Kombinasi warna pastel hangat paling diminati tahun 2026.'
-                            ],
-                            recommendedProductIds: ['fash-1', 'fash-2']
-                        };
-                        this.selectedCategory = 'fashion';
-                    }
-                },
-
-                isAiRecommended(productId) {
-                    return this.aiResult && this.aiResult.recommendedProductIds.includes(productId);
-                },
-
-                clearAiResult() {
-                    this.aiResult = null;
+                    return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(num || 0);
                 },
 
                 addToCart(product) {
-                    const existing = this.cart.find(item => item.id === product.id);
+                    const existing = this.cart.find(i => i.id === product.id);
                     if (existing) {
                         existing.qty++;
                     } else {
@@ -828,46 +484,26 @@ const SUPABASE_ANON_KEY = 'sb_publishable_6aNT_tp7RcnLmi5tMnCVQQ_67aYb...';
                     this.isCartOpen = true;
                 },
 
-                addAllRecommendedToCart() {
-                    if (!this.aiResult) return;
-                    this.products
-                        .filter(p => this.aiResult.recommendedProductIds.includes(p.id))
-                        .forEach(p => this.addToCart(p));
+                increaseQty(item) { item.qty++; },
+                decreaseQty(item) {
+                    if (item.qty > 1) item.qty--;
+                    else this.removeFromCart(item);
+                },
+                removeFromCart(item) {
+                    this.cart = this.cart.filter(i => i.id !== item.id);
                 },
 
-                updateQty(id, change) {
-                    const item = this.cart.find(i => i.id === id);
-                    if (item) {
-                        item.qty += change;
-                        if (item.qty <= 0) {
-                            this.cart = this.cart.filter(i => i.id !== id);
-                        }
-                    }
-                },
-
-                removeFromCart(id) {
-                    this.cart = this.cart.filter(i => i.id !== id);
-                },
-
-                resetFilters() {
-                    this.selectedCategory = 'all';
-                    this.searchQuery = '';
-                    this.aiResult = null;
+                runAiAnalysis() {
+                    if (!this.quizInput) return;
+                    this.selectedCategory = this.quizCategory;
+                    this.searchQuery = this.quizInput.split(' ')[0] || '';
+                    this.isAnalyzerOpen = false;
                 },
 
                 checkoutViaWhatsApp() {
-                    let text = `*ORDER BARU - ZAPLACE AI MARKETPLACE*\n\nDetail Pesanan Saya:\n`;
-                    this.cart.forEach((item, index) => {
-                        text += `${index + 1}. ${item.name} (${item.qty}x) - ${this.formatRupiah(item.price * item.qty)}\n`;
-                    });
-                    text += `\n*Total Tagihan: ${this.formatRupiah(this.cartTotalPrice)}*\n\nMohon informasi ketersediaan stok & nomor rekening untuk pembayaran. Terima kasih!`;
-                    
-                    const url = `https://wa.me/6281317667785?text=${encodeURIComponent(text)}`;
-                    window.open(url, '_blank');
-                },
-
-                checkoutViaMidtrans() {
-                    alert(`[Simulasi Payment Gateway Midtrans Snap]\nTotal Tagihan: ${this.formatRupiah(this.cartTotalPrice)}\n\nPembayaran Snap Midtrans akan terbuka dalam mode Sandbox untuk transaksi ini.`);
+                    let itemsList = this.cart.map(i => `- ${i.name} (${i.qty}x) = ${this.formatRupiah(i.price * i.qty)}`).join('\n');
+                    let text = `*ORDER BARU - ZAPLACE AI*\n\n*Daftar Belanjaan:*\n${itemsList}\n\n*Total Tagihan:* ${this.formatRupiah(this.cartTotalPrice)}`;
+                    window.open(`https://wa.me/6281317667785?text=${encodeURIComponent(text)}`, '_blank');
                 }
             }
         }).mount('#app');

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NexusAI - Next-Gen AI Marketplace</title>
+    <title>ZAPLACE AI - Next-Gen Smart Marketplace</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -44,14 +44,13 @@
         body { font-family: 'Plus Jakarta Sans', sans-serif; }
         h1, h2, h3, .font-display { font-family: 'Space Grotesk', sans-serif; }
         .glass-panel {
-            background: rgba(17, 24, 39, 0.8);
-            backdrop-filter: blur(12px);
+            background: rgba(17, 24, 39, 0.85);
+            backdrop-filter: blur(14px);
             border: 1px solid rgba(255, 255, 255, 0.08);
         }
         .ai-glow {
-            box-shadow: 0 0 25px rgba(52, 211, 153, 0.15);
+            box-shadow: 0 0 30px rgba(52, 211, 153, 0.18);
         }
-        /* Custom Scrollbar */
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: #0b0f17; }
         ::-webkit-scrollbar-thumb { background: #1f2937; border-radius: 4px; }
@@ -66,13 +65,13 @@
             <!-- Logo -->
             <div class="flex items-center gap-3 cursor-pointer" @click="resetFilters">
                 <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-500 to-indigo-600 flex items-center justify-center text-white shadow-lg shadow-brand-500/20">
-                    <i class="fa-solid fa-wand-magic-sparkles text-lg"></i>
+                    <i class="fa-solid fa-bolt text-lg"></i>
                 </div>
                 <div>
                     <span class="font-display font-bold text-2xl tracking-tight text-white flex items-center gap-1.5">
-                        Nexus<span class="text-brand-400">AI</span>
+                        ZAPLACE<span class="text-brand-400">AI</span>
                     </span>
-                    <span class="text-[10px] text-slate-400 font-medium tracking-wider uppercase block -mt-1">Smart Marketplace</span>
+                    <span class="text-[10px] text-slate-400 font-medium tracking-wider uppercase block -mt-1">Next-Gen Marketplace</span>
                 </div>
             </div>
 
@@ -80,11 +79,11 @@
             <div class="flex-1 max-w-xl relative hidden md:block">
                 <div class="relative">
                     <i class="fa-solid fa-robot absolute left-4 top-1/2 -translate-y-1/2 text-brand-400"></i>
-                    <input type="text" v-model="searchQuery" 
-                           placeholder="Coba ketik: 'Mobil Innova bunyi rem saat hujan' atau 'Baju kondangan outdoor'..." 
-                           class="w-full bg-dark-800/90 border border-slate-700/80 rounded-2xl pl-11 pr-24 py-2.5 text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:border-brand-400 focus:ring-1 focus:ring-brand-400 transition">
+                    <input type="text" v-model="searchQuery" @keyup.enter="openQuizWithSearch"
+                           placeholder="Ketik keluhan: 'Rem Innova bunyi pas hujan' atau 'Baju kondangan'..." 
+                           class="w-full bg-dark-800/90 border border-slate-700/80 rounded-2xl pl-11 pr-28 py-2.5 text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:border-brand-400 focus:ring-1 focus:ring-brand-400 transition">
                     <button @click="openQuizWithSearch" class="absolute right-1.5 top-1/2 -translate-y-1/2 bg-brand-500 hover:bg-brand-600 text-dark-900 font-semibold px-3.5 py-1.5 rounded-xl text-xs flex items-center gap-1.5 transition">
-                        <i class="fa-solid fa-bolt"></i> AI Analyze
+                        <i class="fa-solid fa-wand-magic-sparkles"></i> AI Analyze
                     </button>
                 </div>
             </div>
@@ -120,12 +119,12 @@
             <h1 class="text-4xl md:text-6xl font-extrabold text-white tracking-tight leading-tight max-w-4xl mx-auto mb-6">
                 Jangan Bingung Pilih Barang.<br>
                 <span class="bg-gradient-to-r from-brand-400 via-emerald-300 to-indigo-400 bg-clip-text text-transparent">
-                    Ceritakan Masalahmu, AI Racikkan Solusinya.
+                    Ceritakan Masalahmu, ZAPLACE AI Racikkan Solusinya.
                 </span>
             </h1>
 
             <p class="text-slate-400 text-base md:text-lg max-w-2xl mx-auto mb-10">
-                Pencarian konvensional butuh nama produk. NexusAI menganalisis gejala keluhan otomotif, tipe kulit, hingga tema fashion untuk paket rekomendasi presisi.
+                Solusi marketplace berbasis AI terdepan. Menganalisis gejala keluhan otomotif, jenis kulit, hingga style fashion untuk rekomendasi produk yang pasti cocok.
             </p>
 
             <!-- Category Selector Pills -->
@@ -154,7 +153,7 @@
         </div>
     </section>
 
-    <!-- AI RECOMMENDATION RESULT BUMPER (IF QUIZ COMPLETED) -->
+    <!-- AI RECOMMENDATION RESULT BUMPER -->
     <section v-if="aiResult" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
         <div class="glass-panel border-brand-500/40 rounded-3xl p-6 md:p-8 relative overflow-hidden ai-glow">
             <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 pb-6 border-b border-slate-800">
@@ -164,8 +163,8 @@
                     </div>
                     <div>
                         <div class="flex items-center gap-2">
-                            <span class="text-xs font-bold uppercase tracking-wider text-brand-400">Hasil Analisa AI Needs Analyzer</span>
-                            <span class="text-[11px] bg-slate-800 text-slate-300 px-2 py-0.5 rounded-full border border-slate-700">Akurasi 98%</span>
+                            <span class="text-xs font-bold uppercase tracking-wider text-brand-400">Diagnosis ZAPLACE AI Engine</span>
+                            <span class="text-[11px] bg-slate-800 text-slate-300 px-2 py-0.5 rounded-full border border-slate-700">Akurasi 99%</span>
                         </div>
                         <h3 class="text-xl md:text-2xl font-bold text-white mt-1">Diagnosis & Rekomendasi Solusi</h3>
                         <p class="text-slate-300 text-sm mt-1 max-w-3xl">{{ aiResult.summary }}</p>
@@ -221,13 +220,19 @@
         </div>
 
         <!-- Products Grid -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div v-if="filteredProducts.length === 0" class="text-center py-16 bg-dark-800/40 rounded-3xl border border-slate-800">
+            <i class="fa-solid fa-box-open text-4xl text-slate-600 mb-3 block"></i>
+            <p class="text-slate-400 text-sm">Tidak ada produk yang cocok dengan pencarian Anda.</p>
+            <button @click="resetFilters" class="mt-4 text-xs bg-slate-800 hover:bg-slate-700 text-slate-300 px-4 py-2 rounded-xl transition">Reset Filter</button>
+        </div>
+
+        <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             <div v-for="product in filteredProducts" :key="product.id" class="glass-panel rounded-2xl overflow-hidden border-slate-800 hover:border-slate-700 transition-all duration-300 flex flex-col group hover:-translate-y-1">
                 <!-- Product Image -->
                 <div class="relative h-48 bg-dark-800 overflow-hidden">
                     <img :src="product.image" :alt="product.name" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
                     
-                    <!-- AI Match Tag if in AI Result -->
+                    <!-- AI Match Tag -->
                     <div v-if="isAiRecommended(product.id)" class="absolute top-3 left-3 bg-brand-500/90 text-dark-900 font-bold text-[10px] px-2.5 py-1 rounded-full uppercase tracking-wider backdrop-blur-md flex items-center gap-1">
                         <i class="fa-solid fa-wand-magic-sparkles"></i> AI Choice Match
                     </div>
@@ -240,7 +245,6 @@
                 <!-- Content -->
                 <div class="p-5 flex-1 flex flex-col justify-between">
                     <div>
-                        <!-- Category Tag -->
                         <span class="text-[11px] font-semibold text-brand-400 uppercase tracking-wider block mb-1">
                             {{ getCategoryLabel(product.category) }}
                         </span>
@@ -279,7 +283,6 @@
     <!-- AI NEEDS ANALYZER MODAL (QUIZ WIDGET) -->
     <div v-if="isAnalyzerOpen" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-dark-900/80 backdrop-blur-md">
         <div class="glass-panel border-slate-700 rounded-3xl max-w-2xl w-full p-6 md:p-8 relative overflow-hidden shadow-2xl">
-            <!-- Close Button -->
             <button @click="closeAnalyzerModal" class="absolute top-6 right-6 text-slate-400 hover:text-white transition">
                 <i class="fa-solid fa-xmark text-xl"></i>
             </button>
@@ -289,8 +292,8 @@
                 <div class="flex items-center gap-2 text-brand-400 text-xs font-bold uppercase tracking-wider mb-2">
                     <i class="fa-solid fa-sparkles"></i> Langkah 1 dari 2
                 </div>
-                <h2 class="text-2xl font-bold text-white mb-2">Pilih Kategori Kebutuhan Kamu</h2>
-                <p class="text-slate-400 text-sm mb-6">AI akan menyesuaikan pertanyaan khusus berdasarkan sektor yang kamu pilih.</p>
+                <h2 class="text-2xl font-bold text-white mb-2">Pilih Kategori Kebutuhan Anda</h2>
+                <p class="text-slate-400 text-sm mb-6">ZAPLACE AI akan menyesuaikan rekomendasi produk secara presisi.</p>
 
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
                     <button @click="quizCategory = 'automotive'; quizStep = 2" class="p-5 rounded-2xl bg-dark-800 border border-slate-700 hover:border-brand-400 text-left transition group">
@@ -319,7 +322,7 @@
                 </div>
             </div>
 
-            <!-- Step 2: Problem Input & Symptoms -->
+            <!-- Step 2: Problem Input -->
             <div v-if="quizStep === 2">
                 <div class="flex items-center justify-between mb-2">
                     <span class="text-brand-400 text-xs font-bold uppercase tracking-wider">
@@ -329,11 +332,11 @@
                 </div>
                 
                 <h2 class="text-2xl font-bold text-white mb-2">Ceritakan Masalah atau Kebutuhanmu</h2>
-                <p class="text-slate-400 text-sm mb-6">Pilih salah satu keluhan umum atau ketik secara rinci di bawah ini.</p>
+                <p class="text-slate-400 text-sm mb-6">Pilih salah satu contoh situasi atau ketik detailnya langsung di bawah.</p>
 
-                <!-- Presets based on category -->
+                <!-- Presets -->
                 <div class="space-y-2 mb-6">
-                    <label class="text-xs font-semibold text-slate-300 block mb-1">Keluhan / Situasi Sering Terjadi:</label>
+                    <label class="text-xs font-semibold text-slate-300 block mb-1">Situasi Sering Terjadi:</label>
                     <div v-if="quizCategory === 'automotive'" class="grid grid-cols-1 sm:grid-cols-2 gap-2">
                         <button @click="quizInput = 'Rem mobil Innova 2018 berdecit dan licin saat hujan'" class="text-left p-3 rounded-xl bg-dark-800 border border-slate-700 hover:border-brand-400 text-xs text-slate-300 transition">
                             🚗 Rem Innova 2018 berdecit saat hujan
@@ -364,13 +367,13 @@
 
                 <!-- Custom Text Input -->
                 <div class="mb-6">
-                    <label class="text-xs font-semibold text-slate-300 block mb-1">Atau Tulis Rincian Masalahmu:</label>
+                    <label class="text-xs font-semibold text-slate-300 block mb-1">Atau Tuliskan Rincian Masalah Anda:</label>
                     <textarea v-model="quizInput" rows="3" placeholder="Contoh: Saya punya mobil Honda HRV 2020, pengen ganti oli dan filter yang cocok untuk perjalanan jauh..." 
                               class="w-full bg-dark-800 border border-slate-700 rounded-xl p-3 text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:border-brand-400 transition"></textarea>
                 </div>
 
                 <button @click="processAiAnalysis" :disabled="!quizInput.trim()" class="w-full bg-brand-500 hover:bg-brand-600 disabled:opacity-50 text-dark-900 font-bold py-3.5 rounded-xl text-sm flex items-center justify-center gap-2 transition">
-                    <i class="fa-solid fa-wand-magic-sparkles"></i> Analisis & Cari Solusi Produk
+                    <i class="fa-solid fa-wand-magic-sparkles"></i> Analisis & Cari Solusi
                 </button>
             </div>
 
@@ -382,7 +385,7 @@
                         <i class="fa-solid fa-brain"></i>
                     </div>
                 </div>
-                <h3 class="text-xl font-bold text-white mb-2">AI Sedang Menganalisis Masalah Anda...</h3>
+                <h3 class="text-xl font-bold text-white mb-2">ZAPLACE AI Sedang Menganalisis...</h3>
                 <p class="text-slate-400 text-sm max-w-md mx-auto">{{ aiProcessingStatus }}</p>
             </div>
         </div>
@@ -438,7 +441,7 @@
 
                     <div class="space-y-2">
                         <button @click="checkoutViaWhatsApp" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 rounded-xl text-xs flex items-center justify-center gap-2 transition">
-                            <i class="fa-brands fa-whatsapp text-lg"></i> Checkout Format WhatsApp
+                            <i class="fa-brands fa-whatsapp text-lg"></i> Checkout WhatsApp (+62 813-1766-7785)
                         </button>
                         <button @click="checkoutViaMidtrans" class="w-full bg-brand-500 hover:bg-brand-600 text-dark-900 font-bold py-3 rounded-xl text-xs flex items-center justify-center gap-2 transition">
                             <i class="fa-solid fa-credit-card"></i> Bayar Instant (Midtrans)
@@ -449,12 +452,12 @@
         </div>
     </div>
 
-    <!-- TECH ARCHITECTURE FOOTER -->
+    <!-- FOOTER -->
     <footer class="border-t border-slate-800 bg-dark-900 py-8">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-slate-500">
             <div class="flex items-center gap-2">
                 <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                <span>NexusAI Cloud Edge System • GitHub & Cloudflare Ready</span>
+                <span>ZAPLACE AI System • GitHub & Cloudflare Ready</span>
             </div>
             <div class="flex items-center gap-6">
                 <span>Stack: Next.js / Cloudflare Pages / Supabase / Gemini AI API</span>
@@ -476,7 +479,7 @@
                     quizCategory: 'automotive',
                     quizStep: 1,
                     quizInput: '',
-                    aiProcessingStatus: 'Menghubungkan ke Gemini LLM Engine...',
+                    aiProcessingStatus: 'Menghubungkan ke ZAPLACE AI LLM Engine...',
                     aiResult: null,
                     cart: [],
                     
@@ -619,7 +622,7 @@
                     setTimeout(() => {
                         this.generateAiResult();
                         this.isAnalyzerOpen = false;
-                    }, 2200);
+                    }, 2000);
                 },
 
                 generateAiResult() {
@@ -636,9 +639,9 @@
                         this.selectedCategory = 'automotive';
                     } else if (this.quizCategory === 'skincare') {
                         this.aiResult = {
-                            summary: `Diagnosis AI menunjukkan kebutuhan hidrasi seimbang tanpa memicu produksi minyak berlebih pada T-Zone. Kombinasi cleanser lembut dan serum Niacinamide direkomendasikan.`,
+                            summary: `Diagnosis ZAPLACE AI menunjukkan kebutuhan hidrasi seimbang tanpa memicu produksi minyak berlebih pada T-Zone. Kombinasi cleanser lembut dan serum Niacinamide direkomendasikan.`,
                             reasons: [
-                                'pH cleanser yang seimbang tidak akan merusak skin barrier.',
+                                'pH cleanser seimbang menjaga skin barrier sensitif.',
                                 'Niacinamide 12% efektif meredakan kemerahan & mengontrol minyak.',
                                 'Bebas alkohol dan bahan komedogenik.'
                             ],
@@ -705,13 +708,14 @@
                 },
 
                 checkoutViaWhatsApp() {
-                    let text = `*HALO NEXUSAI MARKETPLACE*\nSaya ingin memesan paket produk rekomendasi AI berikut:\n\n`;
+                    let text = `*ORDER BARU - ZAPLACE AI MARKETPLACE*\n\nDetail Pesanan Saya:\n`;
                     this.cart.forEach((item, index) => {
                         text += `${index + 1}. ${item.name} (${item.qty}x) - ${this.formatRupiah(item.price * item.qty)}\n`;
                     });
-                    text += `\n*Total Harga: ${this.formatRupiah(this.cartTotalPrice)}*\n\nMohon bantu proses pengiriman & alamat ya. Terima kasih!`;
+                    text += `\n*Total Tagihan: ${this.formatRupiah(this.cartTotalPrice)}*\n\nMohon informasi ketersediaan stok & nomor rekening untuk pembayaran. Terima kasih!`;
                     
-                    const url = `https://wa.me/6281234567890?text=${encodeURIComponent(text)}`;
+                    // Nomor WA diperbarui: 081317667785 -> Format Internasional 6281317667785
+                    const url = `https://wa.me/6281317667785?text=${encodeURIComponent(text)}`;
                     window.open(url, '_blank');
                 },
 

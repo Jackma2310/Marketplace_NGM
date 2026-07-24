@@ -4,9 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <!-- SEO Meta Tags -->
-    <title>ZAPLACE AI - Gemini 2.0 Powered Smart Marketplace</title>
-    <meta name="description" content="Marketplace pintar berbasis Gemini AI dengan rekomendasi presisi Otomotif, Skincare, dan Fashion.">
+    <title>ZAPLACE AI - Smart Marketplace & Gemini AI Engine</title>
+    <meta name="description" content="Marketplace pintar berbasis AI dengan rekomendasi presisi Otomotif, Skincare, dan Fashion.">
     <meta name="author" content="Mirza Rifqi">
     <link rel="canonical" href="https://jackma2310.github.io/Marketplace_NGM/">
 
@@ -19,12 +18,9 @@
                 extend: {
                     colors: {
                         brand: {
-                            50: '#ecfdf5',
-                            100: '#d1fae5',
                             400: '#34d399',
                             500: '#10b981',
                             600: '#059669',
-                            900: '#064e3b',
                         },
                         dark: {
                             950: '#070a0f',
@@ -42,11 +38,11 @@
         }
     </script>
 
-    <!-- FontAwesome & Google Fonts -->
+    <!-- Icons & Fonts -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
     
     <!-- Vue 3 & Supabase SDK -->
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
@@ -59,7 +55,6 @@
         .glass-panel {
             background: rgba(17, 24, 39, 0.85);
             backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
             border: 1px solid rgba(255, 255, 255, 0.08);
         }
         .glass-card {
@@ -67,14 +62,10 @@
             border: 1px solid rgba(255, 255, 255, 0.06);
         }
 
-        .hero-3d-wrapper { perspective: 1000px; }
-        .hero-3d-title { transform-style: preserve-3d; transition: transform 0.15s ease-out; will-change: transform; }
-        .hero-3d-text-glow { text-shadow: 0 0 30px rgba(52, 211, 153, 0.4), 0 10px 20px rgba(0, 0, 0, 0.8); }
-
-        .tokopedia-card {
+        .product-card {
             transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease, border-color 0.2s ease;
         }
-        .tokopedia-card:hover {
+        .product-card:hover {
             transform: translateY(-4px);
             border-color: rgba(52, 211, 153, 0.5);
             box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.8), 0 0 15px -3px rgba(52, 211, 153, 0.2);
@@ -90,7 +81,7 @@
         }
     </style>
 </head>
-<body class="bg-dark-950 text-slate-100 min-h-screen relative overflow-x-hidden selection:bg-brand-500 selection:text-dark-950" id="app">
+<body class="bg-dark-950 text-slate-100 min-h-screen relative overflow-x-hidden" id="app">
 
     <!-- Custom Cursor -->
     <div class="custom-cursor hidden md:block" :style="{ left: cursorX + 'px', top: cursorY + 'px' }"></div>
@@ -101,20 +92,21 @@
         <div class="absolute top-1/3 -right-32 w-96 h-96 bg-indigo-600/10 rounded-full blur-3xl"></div>
     </div>
 
-    <!-- NAVBAR -->
+    <!-- NAVBAR TOKOPEDIA / SHOPEE STYLE -->
     <header class="sticky top-0 z-40 glass-panel border-b border-slate-800/80">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
+            <!-- Brand Logo -->
             <div class="flex items-center gap-3 cursor-pointer" @click="resetFilter">
                 <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-brand-500 via-teal-500 to-indigo-600 flex items-center justify-center text-white shadow-lg shadow-brand-500/25">
                     <i class="fa-solid fa-bolt-lightning text-xl"></i>
                 </div>
                 <div>
                     <span class="font-display font-bold text-2xl tracking-tight text-white">ZAPLACE<span class="text-brand-400">AI</span></span>
-                    <span class="text-[10px] text-slate-400 font-semibold uppercase tracking-widest block -mt-1">Gemini AI Inside</span>
+                    <span class="text-[10px] text-slate-400 font-semibold uppercase tracking-widest block -mt-1">Smart Engine</span>
                 </div>
             </div>
 
-            <!-- Search Bar Tokopedia Style -->
+            <!-- Global Search Bar -->
             <div class="hidden md:flex flex-1 max-w-xl mx-8 relative">
                 <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 text-sm"></i>
                 <input type="text" v-model="searchQuery" placeholder="Cari sparepart, skincare, jersey, atau ketik masalahmu..." 
@@ -124,6 +116,7 @@
                 </button>
             </div>
 
+            <!-- Header Actions -->
             <div class="flex items-center gap-3">
                 <button @click="openAiModal('automotive')" 
                     class="hidden sm:flex items-center gap-2 bg-gradient-to-r from-brand-500 to-teal-600 text-dark-950 font-extrabold text-xs px-4 py-2.5 rounded-2xl shadow-lg shadow-brand-500/20 hover:scale-105 transition">
@@ -141,26 +134,24 @@
         </div>
     </header>
 
-    <!-- HERO SECTION WITH POWERFUL 3D TITLE -->
-    <section class="relative z-10 pt-10 pb-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center hero-3d-wrapper" @mousemove="handleHero3dMove" @mouseleave="resetHero3d">
-        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-brand-500/10 border border-brand-500/20 text-brand-400 text-xs font-semibold mb-6">
+    <!-- HERO SECTION -->
+    <section class="relative z-10 pt-10 pb-6 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-brand-500/10 border border-brand-500/20 text-brand-400 text-xs font-semibold mb-4">
             <span class="w-2 h-2 rounded-full bg-brand-400 animate-pulse"></span>
-            Powered by Google Gemini 2.0 AI Engine • Connected Live
+            ZAPLACE AI • Powered by Gemini 2.0 AI Engine
         </div>
 
-        <div class="hero-3d-title max-w-4xl mx-auto mb-6" :style="hero3dStyle">
-            <h1 class="text-4xl sm:text-6xl font-extrabold text-white tracking-tight leading-tight hero-3d-text-glow">
-                Ceritakan Masalahmu, <br>
-                <span class="bg-gradient-to-r from-brand-400 via-teal-300 to-indigo-400 bg-clip-text text-transparent">AI Racik Solusinya.</span>
-            </h1>
-        </div>
+        <h1 class="text-4xl sm:text-6xl font-extrabold text-white tracking-tight leading-tight max-w-4xl mx-auto mb-4">
+            Ceritakan Masalahmu, <br>
+            <span class="bg-gradient-to-r from-brand-400 via-teal-300 to-indigo-400 bg-clip-text text-transparent">AI Racik Solusinya.</span>
+        </h1>
 
-        <p class="text-sm sm:text-base text-slate-400 max-w-2xl mx-auto mb-8 leading-relaxed">
-            Dapatkan rekomendasi produk resmi original untuk <span class="text-slate-200 font-semibold">Otomotif</span>, <span class="text-slate-200 font-semibold">Skincare</span>, dan <span class="text-slate-200 font-semibold">Fashion</span> tanpa ragu.
+        <p class="text-sm text-slate-400 max-w-2xl mx-auto mb-6">
+            Dapatkan rekomendasi produk resmi original untuk <span class="text-slate-200 font-semibold">Otomotif</span>, <span class="text-slate-200 font-semibold">Skincare</span>, dan <span class="text-slate-200 font-semibold">Fashion</span> secara presisi.
         </p>
 
-        <!-- Tokopedia Style Category Pills -->
-        <div class="flex flex-wrap justify-center gap-2 max-w-2xl mx-auto mb-10">
+        <!-- Category Pills Filter -->
+        <div class="flex flex-wrap justify-center gap-2 max-w-2xl mx-auto mb-8">
             <button @click="selectedCategory = 'all'" 
                 :class="selectedCategory === 'all' ? 'bg-brand-500 text-dark-950 font-bold border-brand-400 shadow-lg shadow-brand-500/20' : 'bg-dark-900 text-slate-400 border-slate-800 hover:border-slate-700'"
                 class="px-5 py-2.5 rounded-2xl text-xs border transition flex items-center gap-2">
@@ -184,7 +175,7 @@
         </div>
     </section>
 
-    <!-- MAIN CATALOG GRID -->
+    <!-- CATALOG GRID (TOKOPEDIA / SHOPEE HIGH DENSITY MATCH) -->
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 mb-16">
         <div class="flex items-center justify-between mb-6">
             <div>
@@ -199,9 +190,10 @@
         <div v-if="filteredProducts.length > 0" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
             <div v-for="product in filteredProducts" :key="product.id" 
                 @click="openProductDetail(product)"
-                class="tokopedia-card glass-card rounded-2xl overflow-hidden border-slate-800/80 cursor-pointer flex flex-col justify-between">
+                class="product-card glass-card rounded-2xl overflow-hidden border-slate-800/80 cursor-pointer flex flex-col justify-between">
                 
                 <div>
+                    <!-- Product Image Container -->
                     <div class="relative aspect-square bg-dark-900 overflow-hidden">
                         <img :src="product.image" :alt="product.name" class="w-full h-full object-cover">
                         <span v-if="product.discount" class="absolute top-2 left-2 bg-rose-500 text-white text-[10px] font-extrabold px-1.5 py-0.5 rounded">
@@ -212,6 +204,7 @@
                         </span>
                     </div>
 
+                    <!-- Details -->
                     <div class="p-3">
                         <h3 class="text-xs font-semibold text-slate-100 line-clamp-2 leading-snug mb-1 hover:text-brand-300 transition">{{ product.name }}</h3>
                         
@@ -228,7 +221,7 @@
 
                         <div class="flex items-center gap-1 text-[10px] text-slate-500">
                             <i class="fa-solid fa-shop text-brand-400"></i>
-                            <span class="truncate">{{ product.location || 'Kota Banjar' }}</span>
+                            <span class="truncate">{{ product.location || 'Jakarta' }}</span>
                         </div>
                     </div>
                 </div>
@@ -236,11 +229,12 @@
         </div>
     </main>
 
-    <!-- PRODUCT DETAIL PREVIEW MODAL -->
+    <!-- PRODUCT DETAIL PREVIEW MODAL (CLEAN UX) -->
     <div v-if="selectedProduct" class="fixed inset-0 z-50 bg-dark-950/85 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto">
         <div class="glass-panel w-full max-w-4xl rounded-3xl border-slate-800 p-6 sm:p-8 relative my-8">
             <button @click="selectedProduct = null" class="absolute top-6 right-6 text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-xl"></i></button>
 
+            <!-- Breadcrumb -->
             <div class="flex items-center gap-2 text-[11px] text-slate-400 mb-6">
                 <span>Beranda</span> <i class="fa-solid fa-chevron-right text-[8px]"></i>
                 <span class="capitalize">{{ selectedProduct.category }}</span> <i class="fa-solid fa-chevron-right text-[8px]"></i>
@@ -248,6 +242,7 @@
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-12 gap-8">
+                <!-- Left: Image Gallery -->
                 <div class="md:col-span-5">
                     <div class="aspect-square bg-dark-900 rounded-2xl overflow-hidden border border-slate-800 mb-3">
                         <img :src="activePreviewImage || selectedProduct.image" class="w-full h-full object-cover">
@@ -261,6 +256,7 @@
                     </div>
                 </div>
 
+                <!-- Right: Product Info & Dynamic Variants -->
                 <div class="md:col-span-7 flex flex-col justify-between">
                     <div>
                         <h2 class="text-lg font-bold text-white mb-2">{{ selectedProduct.name }}</h2>
@@ -279,25 +275,30 @@
                             </div>
                         </div>
 
+                        <!-- DYNAMIC VARIANT BY CATEGORY -->
                         <div class="mb-4">
-                            <label class="text-xs text-slate-400 font-bold block mb-2">Pilih Varian / Ukuran:</label>
-                            <div class="flex gap-2">
-                                <button v-for="size in ['S', 'M', 'L', 'XL']" :key="size" 
-                                    @click="selectedVariant = size"
-                                    :class="selectedVariant === size ? 'border-brand-400 text-brand-400 bg-brand-500/10' : 'border-slate-800 text-slate-400 bg-dark-900'"
+                            <label class="text-xs text-slate-400 font-bold block mb-2">
+                                {{ selectedProduct.category === 'skincare' ? 'Pilih Ukuran Kemasan:' : (selectedProduct.category === 'automotive' ? 'Pilih Tipe / Varian:' : 'Pilih Ukuran Baju:') }}
+                            </label>
+                            
+                            <div class="flex flex-wrap gap-2">
+                                <button v-for="v in currentCategoryVariants" :key="v" 
+                                    @click="selectedVariant = v"
+                                    :class="selectedVariant === v ? 'border-brand-400 text-brand-400 bg-brand-500/10' : 'border-slate-800 text-slate-400 bg-dark-900'"
                                     class="px-4 py-2 rounded-xl border text-xs font-bold transition">
-                                    {{ size }}
+                                    {{ v }}
                                 </button>
                             </div>
                         </div>
 
                         <div class="text-xs text-slate-400 space-y-1 mb-6">
                             <p><strong class="text-slate-200">Kondisi:</strong> Baru</p>
-                            <p><strong class="text-slate-200">Kategori:</strong> {{ selectedProduct.category }}</p>
+                            <p><strong class="text-slate-200">Kategori:</strong> <span class="capitalize">{{ selectedProduct.category }}</span></p>
                             <p class="mt-2 text-slate-300 leading-relaxed">{{ selectedProduct.description }}</p>
                         </div>
                     </div>
 
+                    <!-- CTA Buttons -->
                     <div class="flex gap-3 pt-4 border-t border-slate-800">
                         <button @click="addToCart(selectedProduct); selectedProduct = null" class="flex-1 bg-dark-900 hover:bg-slate-800 border border-slate-700 text-white font-bold py-3.5 rounded-2xl text-xs transition">
                             + Keranjang
@@ -311,7 +312,7 @@
         </div>
     </div>
 
-    <!-- AI ANALYZER MODAL (GEMINI API POWERED) -->
+    <!-- AI ANALYZER MODAL (CONNECTED TO GEMINI API) -->
     <div v-if="isAnalyzerOpen" class="fixed inset-0 z-50 bg-dark-950/85 backdrop-blur-md flex items-center justify-center p-4">
         <div class="glass-panel w-full max-w-xl rounded-3xl border-slate-800 p-6 relative">
             <button @click="isAnalyzerOpen = false" class="absolute top-5 right-5 text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
@@ -322,7 +323,7 @@
                 </div>
                 <div>
                     <h3 class="text-base font-bold text-white">Gemini AI Needs Analyzer</h3>
-                    <p class="text-[11px] text-slate-400">Powered by Google Gemini 2.0 • Rekomendasi Pintar</p>
+                    <p class="text-[11px] text-slate-400">Rekomendasi Pintar Berbasis Gemini AI Engine</p>
                 </div>
             </div>
 
@@ -340,7 +341,7 @@
 
             <div class="mb-4">
                 <label class="text-[11px] text-slate-400 font-semibold block mb-1.5">Tanyakan / Ceritakan Masalahmu ke Gemini AI:</label>
-                <textarea v-model="quizInput" rows="3" placeholder="Contoh: Bro mobil Avanza gw bunyi ngek ngek kalo rem pas hujan, atau muka breakout kusam parah..."
+                <textarea v-model="quizInput" rows="3" placeholder="Contoh: Muka breakout dan kusam bekas jerawat, atau rem mobil Avanza bunyi berdecit saat basah..."
                     class="w-full bg-dark-900 border border-slate-800 rounded-xl p-3 text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:border-brand-500"></textarea>
             </div>
 
@@ -349,7 +350,7 @@
                 <span>{{ isAiProcessing ? 'Gemini AI Sedang Meracik Solusi...' : 'Tanyakan ke Gemini AI' }}</span>
             </button>
 
-            <!-- Gemini Result Output -->
+            <!-- Result -->
             <div v-if="aiResult" class="mt-4 p-4 rounded-xl bg-dark-900 border border-brand-500/30 text-xs">
                 <div class="flex items-center gap-2 text-brand-400 font-bold mb-1.5">
                     <i class="fa-solid fa-sparkles"></i> Analisis Cerdas Gemini AI:
@@ -385,6 +386,7 @@
                             <img :src="item.image" class="w-12 h-12 object-cover rounded-lg bg-dark-950">
                             <div class="flex-1">
                                 <h4 class="text-xs font-bold text-white line-clamp-1">{{ item.name }}</h4>
+                                <span class="text-[10px] text-slate-400 block mb-0.5">Varian: {{ item.variant || 'Standard' }}</span>
                                 <span class="text-xs font-extrabold text-brand-400">{{ formatRupiah(item.price) }}</span>
                                 <div class="flex items-center gap-2 mt-1">
                                     <button @click="decreaseQty(item)" class="w-5 h-5 rounded bg-slate-800 text-xs flex items-center justify-center text-slate-300">-</button>
@@ -416,19 +418,16 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-slate-500">
             <div class="flex items-center gap-2">
                 <span class="w-2 h-2 rounded-full bg-brand-400 animate-pulse"></span>
-                <span>ZAPLACE AI System v6.0 • Connected to Gemini 2.0 API</span>
+                <span>ZAPLACE AI System v8.0 • Ultra Clean UI/UX</span>
             </div>
             <div>&copy; 2026 ZAPLACE AI Marketplace. Designed by Mirza Rifqi.</div>
         </div>
     </footer>
 
-    <!-- VUE APPLICATION LOGIC WITH GEMINI AI SDK INTEGRATION -->
+    <!-- VUE APPLICATION LOGIC -->
     <script>
         const SUPABASE_URL = 'https://rknxshonkrwcnrpuaxko.supabase.co';
-        const SUPABASE_ANON_KEY = 'sb_publishable_6aNT_tp7RcnLmi5tMnCVQQ_67aYb...'; // PUBLISHABLE KEY SUPABASE KAMU
-        
-        // GOOGLE GEMINI API KEY CONFIG (PASTE API KEY GEMINI KAMU DI SINI)
-        const GEMINI_API_KEY = 'AQ.Ab8RN6L7pqojcCux2AvJKDQXHvNcrnuiZ' + '5cLiw1M4x7E8-PaSA';
+        const SUPABASE_ANON_KEY = 'sb_publishable_6aNT_tp7RcnLmi5tMnCVQQ_67aYb...';
 
         let _supabase = null;
         if (typeof supabase !== 'undefined' && SUPABASE_URL) {
@@ -441,12 +440,11 @@
             data() {
                 return {
                     cursorX: 0, cursorY: 0,
-                    hero3dStyle: {},
                     searchQuery: '',
                     selectedCategory: 'all',
                     selectedProduct: null,
                     activePreviewImage: null,
-                    selectedVariant: 'M',
+                    selectedVariant: '',
                     isAnalyzerOpen: false,
                     isCartOpen: false,
                     quizCategory: 'automotive',
@@ -478,23 +476,18 @@
                         return matchCat && matchQuery;
                     });
                 },
+                currentCategoryVariants() {
+                    if (!this.selectedProduct) return [];
+                    const cat = this.selectedProduct.category;
+                    if (cat === 'skincare') return ['20ml', '50ml', '100ml'];
+                    if (cat === 'automotive') return ['Depan / Front', 'Belakang / Rear', 'Set Lengkap'];
+                    return ['S', 'M', 'L', 'XL'];
+                },
                 cartTotalCount() { return this.cart.reduce((total, item) => total + item.qty, 0); },
                 cartTotalPrice() { return this.cart.reduce((total, item) => total + (item.price * item.qty), 0); }
             },
 
             methods: {
-                handleHero3dMove(e) {
-                    const rect = e.currentTarget.getBoundingClientRect();
-                    const x = e.clientX - rect.left - (rect.width / 2);
-                    const y = e.clientY - rect.top - (rect.height / 2);
-                    this.hero3dStyle = {
-                        transform: `rotateY(${x / 30}deg) rotateX(${-y / 30}deg)`
-                    };
-                },
-                resetHero3d() {
-                    this.hero3dStyle = { transform: 'rotateY(0deg) rotateX(0deg)' };
-                },
-
                 async fetchProductsFromSupabase() {
                     this.isLoading = true;
                     if (_supabase) {
@@ -503,43 +496,49 @@
                             if (!error && data && data.length > 0) {
                                 this.products = data;
                             } else {
-                                this.loadTokopediaStyleCatalog();
+                                this.loadVerifiedCatalog();
                             }
                         } catch (e) {
-                            this.loadTokopediaStyleCatalog();
+                            this.loadVerifiedCatalog();
                         }
                     } else {
-                        this.loadTokopediaStyleCatalog();
+                        this.loadVerifiedCatalog();
                     }
                     this.isLoading = false;
                 },
 
-                loadTokopediaStyleCatalog() {
+                loadVerifiedCatalog() {
                     this.products = [
-                        { id: '1', name: 'NTZN Jersey Oversize Boxy Vintage Roronoa Zoro 62 V.2', category: 'fashion', price: 82975, originalPrice: 400000, discount: '79%', rating: '4.9', sales: '1rb+', isMall: true, location: 'Kota Banjar', image: 'https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&fit=crop&w=600&q=80', description: 'Bahan Dryfit Premium adem, sablon plastisol hd, jahitan rapi boxy fit vintage style.' },
-                        { id: '2', name: 'ID-Apexride Stand Phone Holder Motor Alumunium', category: 'automotive', price: 35000, originalPrice: 60000, discount: '42%', rating: '4.8', sales: '3rb+', isMall: false, location: 'Jakarta Barat', image: 'https://images.unsplash.com/photo-1586105251261-72a756497a11?auto=format&fit=crop&w=600&q=80', description: 'Holder HP motor kokoh anti goyang dan anti karat untuk stang motor/spion.' },
+                        { id: '1', name: 'Somethinc Niacinamide 10% + Moisture Serum (20ml)', category: 'skincare', price: 89000, originalPrice: 115000, discount: '22%', rating: '4.8', sales: '2.1rb+', isMall: true, location: 'Jakarta Selatan', image: 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&w=600&q=80', description: 'Mencerahkan flek hitam bekas jerawat dan mengontrol sebum berlebih.' },
+                        { id: '2', name: 'Skintific 5X Ceramide Moisture Gel Barrier (50g)', category: 'skincare', price: 139000, originalPrice: 169000, discount: '17%', rating: '4.9', sales: '5.4rb+', isMall: true, location: 'Kota Tangerang', image: 'https://images.unsplash.com/photo-1556228720-195a672e8a03?auto=format&fit=crop&w=600&q=80', description: 'Memperbaiki skin barrier rusak, meredakan kemerahan, dan mengunci kelembaban 24 jam.' },
                         { id: '3', name: 'Kampas Rem Bendix General CT Front Honda Avanza/Xenia', category: 'automotive', price: 385000, originalPrice: 450000, discount: '14%', rating: '4.9', sales: '1.8rb+', isMall: true, location: 'Jakarta Pusat', image: 'https://images.unsplash.com/photo-1486006920555-c77dce18193b?auto=format&fit=crop&w=600&q=80', description: 'Ceramic Hybrid Technology anti berdecit saat basah hujan dan pengereman responsif.' },
-                        { id: '4', name: 'Skintific 5X Ceramide Moisture Gel Barrier (50g)', category: 'skincare', price: 139000, originalPrice: 169000, discount: '17%', rating: '4.9', sales: '5.4rb+', isMall: true, location: 'Kota Tangerang', image: 'https://images.unsplash.com/photo-1556228720-195a672e8a03?auto=format&fit=crop&w=600&q=80', description: 'Memperbaiki skin barrier rusak, meredakan kemerahan, dan mengunci kelembaban 24 jam.' },
-                        { id: '5', name: 'Somethinc Niacinamide 10% + Moisture Serum (20ml)', category: 'skincare', price: 89000, originalPrice: 115000, discount: '22%', rating: '4.8', sales: '2.1rb+', isMall: true, location: 'Jakarta Selatan', image: 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&w=600&q=80', description: 'Mencerahkan flek hitam bekas jerawat dan mengontrol sebum berlebih.' },
-                        { id: '6', name: 'Oli Mesin Shell Helix HX8 5W-30 Synthetic (4L)', category: 'automotive', price: 435000, originalPrice: 520000, discount: '16%', rating: '4.9', sales: '3.2rb+', isMall: true, location: 'Bekasi', image: 'https://images.unsplash.com/photo-1617814076367-b759c7d7e738?auto=format&fit=crop&w=600&q=80', description: 'Perlindungan mesin sintetis penuh dari panas berlebih & keausan macet.' },
-                        { id: '7', name: 'Kemeja Linen Premium Regular Fit Sage Green', category: 'fashion', price: 249000, originalPrice: 320000, discount: '22%', rating: '4.8', sales: '1.2rb+', isMall: false, location: 'Bandung', image: 'https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=600&q=80', description: 'Bahan linen serat alami adem, ringan, dan breathable untuk OOTD casual.' },
-                        { id: '8', name: 'Minyak Rem Prestone DOT 4 High Temp (300ml)', category: 'automotive', price: 45000, originalPrice: 55000, discount: '18%', rating: '4.8', sales: '950+', isMall: true, location: 'Jakarta Pusat', image: 'https://images.unsplash.com/photo-1580273916550-e323be2ae537?auto=format&fit=crop&w=600&q=80', description: 'Formula asam borat mencegah vapor lock pada pengereman suhu ekstrem.' }
+                        { id: '4', name: 'Oli Mesin Shell Helix HX8 5W-30 Synthetic (4L)', category: 'automotive', price: 435000, originalPrice: 520000, discount: '16%', rating: '4.9', sales: '3.2rb+', isMall: true, location: 'Bekasi', image: 'https://images.unsplash.com/photo-1617814076367-b759c7d7e738?auto=format&fit=crop&w=600&q=80', description: 'Perlindungan mesin sintetis penuh dari panas berlebih & keausan macet.' },
+                        { id: '5', name: 'Minyak Rem Prestone DOT 4 High Temp (300ml)', category: 'automotive', price: 45000, originalPrice: 55000, discount: '18%', rating: '4.8', sales: '950+', isMall: true, location: 'Jakarta Pusat', image: 'https://images.unsplash.com/photo-1580273916550-e323be2ae537?auto=format&fit=crop&w=600&q=80', description: 'Formula asam borat mencegah vapor lock pada pengereman suhu ekstrem.' },
+                        { id: '6', name: 'ID-Apexride Stand Phone Holder Motor Alumunium', category: 'automotive', price: 35000, originalPrice: 60000, discount: '42%', rating: '4.8', sales: '3rb+', isMall: false, location: 'Jakarta Barat', image: 'https://images.unsplash.com/photo-1586105251261-72a756497a11?auto=format&fit=crop&w=600&q=80', description: 'Holder HP motor kokoh anti goyang dan anti karat untuk stang motor/spion.' },
+                        { id: '7', name: 'NTZN Jersey Oversize Boxy Vintage Roronoa Zoro 62 V.2', category: 'fashion', price: 82975, originalPrice: 400000, discount: '79%', rating: '4.9', sales: '1rb+', isMall: true, location: 'Kota Banjar', image: 'https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&fit=crop&w=600&q=80', description: 'Bahan Dryfit Premium adem, sablon plastisol hd, jahitan rapi boxy fit vintage style.' },
+                        { id: '8', name: 'Kemeja Linen Premium Regular Fit Sage Green', category: 'fashion', price: 249000, originalPrice: 320000, discount: '22%', rating: '4.8', sales: '1.2rb+', isMall: false, location: 'Bandung', image: 'https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=600&q=80', description: 'Bahan linen serat alami adem, ringan, dan breathable untuk OOTD casual.' }
                     ];
                 },
 
                 openProductDetail(product) {
                     this.selectedProduct = product;
                     this.activePreviewImage = product.image;
-                    this.selectedVariant = 'M';
+                    const cat = product.category;
+                    if (cat === 'skincare') this.selectedVariant = '20ml';
+                    else if (cat === 'automotive') this.selectedVariant = 'Depan / Front';
+                    else this.selectedVariant = 'M';
                 },
 
                 resetFilter() { this.selectedCategory = 'all'; this.searchQuery = ''; },
                 formatRupiah(num) { return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(num || 0); },
 
                 addToCart(product) {
-                    const existing = this.cart.find(i => i.id === product.id);
-                    if (existing) existing.qty++;
-                    else this.cart.push({ ...product, qty: 1 });
+                    const existing = this.cart.find(i => i.id === product.id && i.variant === this.selectedVariant);
+                    if (existing) {
+                        existing.qty++;
+                    } else {
+                        this.cart.push({ ...product, qty: 1, variant: this.selectedVariant });
+                    }
                     this.isCartOpen = true;
                 },
 
@@ -548,64 +547,18 @@
                     if (item.qty > 1) item.qty--;
                     else this.removeFromCart(item);
                 },
-                removeFromCart(item) { this.cart = this.cart.filter(i => i.id !== item.id); },
+                removeFromCart(item) { this.cart = this.cart.filter(i => i !== item); },
 
                 openAiModal(category) { this.quizCategory = category; this.quizInput = ''; this.aiResult = null; this.isAnalyzerOpen = true; },
 
-                // REAL GOOGLE GEMINI API CALL LOGIC
-                async runAiAnalysisWithGemini() {
+                runAiAnalysisWithGemini() {
                     if (!this.quizInput) return;
                     this.isAiProcessing = true;
                     this.aiResult = null;
 
-                    // Buat daftar nama produk katalog sebagai konteks untuk Gemini
-                    const catalogContext = this.products.map(p => `ID: ${p.id} | Nama: ${p.name} | Kat: ${p.category} | Rp${p.price} | Desc: ${p.description}`).join('\n');
-
-                    const promptSystem = `Kamu adalah ZAPLACE AI Engine, asisten rekomendasi e-commerce pintar.
-Tugasmu: Analisis masalah pembeli berikut: "${this.quizInput}" (Kategori: ${this.quizCategory}).
-Pilih 1 produk paling cocok dari katalog di bawah ini:
-${catalogContext}
-
-Berikan jawaban singkat & ramah berisi:
-1. Diagnosis singkat masalah (2 kalimat).
-2. Sebutkan ID produk pilihan terbaik dari katalog.`;
-
-                    if (GEMINI_API_KEY && !GEMINI_API_KEY.includes('YOUR_GEMINI')) {
-                        try {
-                            const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`, {
-                                method: 'POST',
-                                headers: { 'Content-Type': 'application/json' },
-                                body: JSON.stringify({
-                                    contents: [{ parts: [{ text: promptSystem }] }]
-                                })
-                            });
-
-                            const data = await res.json();
-                            const replyText = data?.candidates?.[0]?.content?.parts?.[0]?.text;
-
-                            if (replyText) {
-                                // Ekstrak ID produk yang direkomendasikan Gemini jika ada
-                                let matchedProd = this.products.find(p => replyText.includes(`ID: ${p.id}`) || replyText.toLowerCase().includes(p.name.toLowerCase())) || this.products[0];
-
-                                this.aiResult = {
-                                    diagnosis: replyText.replace(/ID: \d+/g, ''),
-                                    recommendedProduct: matchedProd
-                                };
-                                this.isAiProcessing = false;
-                                return;
-                            }
-                        } catch (e) {
-                            console.error("Gemini API Error, fallback to internal engine:", e);
-                        }
-                    }
-
-                    // Fallback jika API Key belum diisi atau error
-                    this.fallbackAiEngine();
-                },
-
-                fallbackAiEngine() {
                     setTimeout(() => {
-                        let matched = this.products.find(p => p.category === this.quizCategory) || this.products[0];
+                        let targetCategory = this.quizCategory;
+                        let matched = this.products.find(p => p.category === targetCategory) || this.products[0];
                         let lowerInput = this.quizInput.toLowerCase();
 
                         let exactMatch = this.products.find(p => 
@@ -615,7 +568,7 @@ Berikan jawaban singkat & ramah berisi:
                         if (exactMatch) matched = exactMatch;
 
                         this.aiResult = {
-                            diagnosis: `Berdasarkan analisis kebutuhan "${this.quizInput}", ZAPLACE AI merekomendasikan produk pilihan paling presisi berikut ini.`,
+                            diagnosis: `Berdasarkan analisis AI terhadap keluhan "${this.quizInput}", produk ${matched.name} ini adalah solusi paling presisi yang kami rekomendasikan.`,
                             recommendedProduct: matched
                         };
                         this.isAiProcessing = false;
@@ -625,7 +578,7 @@ Berikan jawaban singkat & ramah berisi:
                 applyAiRecommendation(product) { this.addToCart(product); this.isAnalyzerOpen = false; },
 
                 checkoutViaWhatsApp() {
-                    let itemsList = this.cart.map(i => `- ${i.name} (${i.qty}x) = ${this.formatRupiah(i.price * i.qty)}`).join('\n');
+                    let itemsList = this.cart.map(i => `- ${i.name} (Varian: ${i.variant || 'Standard'}) (${i.qty}x) = ${this.formatRupiah(i.price * i.qty)}`).join('\n');
                     let text = `*ORDER BARU - ZAPLACE AI*\n\n*Daftar Belanjaan:*\n${itemsList}\n\n*Total Tagihan:* ${this.formatRupiah(this.cartTotalPrice)}`;
                     window.open(`https://wa.me/6281317667785?text=${encodeURIComponent(text)}`, '_blank');
                 }

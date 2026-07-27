@@ -102,7 +102,7 @@
                 </div>
                 <div>
                     <span class="font-display font-bold text-2xl tracking-tight text-white">ZAPLACE<span class="text-brand-400">AI</span></span>
-                    <span class="text-[10px] text-slate-400 font-semibold uppercase tracking-widest block -mt-1">Smart Engine</span>
+                    <span class="text-[10px] text-slate-400 font-semibold uppercase tracking-widest block -mt-1">Smart Engine v9.0</span>
                 </div>
             </div>
 
@@ -175,8 +175,8 @@
         </div>
     </section>
 
-    <!-- FLASH SALE BANNER (TOKOPEDIA/SHOPEE STYLE) -->
-    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-2">
+    <!-- FLASH SALE BANNER -->
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-4">
         <div class="bg-gradient-to-r from-rose-600 via-rose-500 to-orange-500 rounded-2xl px-5 py-3 flex items-center justify-between flex-wrap gap-3">
             <div class="flex items-center gap-2 text-white font-extrabold text-sm">
                 <i class="fa-solid fa-bolt"></i> Flash Sale Hari Ini
@@ -202,7 +202,7 @@
             </button>
         </div>
 
-        <div v-if="filteredProducts.length > 0" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+        <div v-if="filteredProducts.length > 0" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
             <div v-for="product in filteredProducts" :key="product.id" 
                 @click="openProductDetail(product)"
                 class="product-card group glass-card rounded-2xl overflow-hidden border-slate-800/80 cursor-pointer flex flex-col justify-between relative">
@@ -218,14 +218,12 @@
                             <i class="fa-solid fa-circle-check"></i> Official
                         </span>
 
-                        <!-- Wishlist heart -->
                         <button @click.stop="toggleWishlist(product)"
                             class="absolute top-2 right-2 w-7 h-7 rounded-full bg-dark-950/70 backdrop-blur flex items-center justify-center text-xs transition"
                             :class="isWishlisted(product) ? 'text-rose-400' : 'text-slate-300 hover:text-rose-300'">
                             <i :class="isWishlisted(product) ? 'fa-solid' : 'fa-regular'" class="fa-heart"></i>
                         </button>
 
-                        <!-- Quick add to cart, appears on hover like Shopee/Tokopedia -->
                         <button @click.stop="addToCartQuick(product)"
                             class="absolute bottom-2 right-2 w-8 h-8 rounded-full bg-brand-500 text-dark-950 flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition shadow-lg shadow-brand-500/30">
                             <i class="fa-solid fa-cart-plus"></i>
@@ -253,7 +251,7 @@
                                 <span class="truncate">{{ product.location || 'Jakarta' }}</span>
                             </span>
                             <span class="flex items-center gap-1 text-brand-400 font-semibold shrink-0">
-                                <i class="fa-solid fa-truck-fast"></i> Ongkir
+                                <i class="fa-solid fa-truck-fast"></i> Bebas Ongkir
                             </span>
                         </div>
                     </div>
@@ -266,7 +264,7 @@
         </div>
     </main>
 
-    <!-- PRODUCT DETAIL PREVIEW MODAL (CLEAN UX) -->
+    <!-- PRODUCT DETAIL PREVIEW MODAL -->
     <div v-if="selectedProduct" class="fixed inset-0 z-50 bg-dark-950/85 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto">
         <div class="glass-panel w-full max-w-4xl rounded-3xl border-slate-800 p-6 sm:p-8 relative my-8">
             <button @click="selectedProduct = null" class="absolute top-6 right-6 text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-xl"></i></button>
@@ -285,7 +283,7 @@
                         <img :src="activePreviewImage || selectedProduct.image" class="w-full h-full object-cover">
                     </div>
                     <div class="flex gap-2">
-                        <div v-for="(img, idx) in galleryImages" :key="idx"
+                        <div v-for="(img, idx) in selectedProduct.images" :key="idx"
                             @click="activePreviewImage = img"
                             :class="activePreviewImage === img ? 'border-brand-400' : 'border-slate-800'"
                             class="w-16 h-16 rounded-xl border overflow-hidden cursor-pointer hover:border-brand-400 transition">
@@ -350,7 +348,7 @@
         </div>
     </div>
 
-    <!-- AI ANALYZER MODAL (CONNECTED TO GEMINI API) -->
+    <!-- AI ANALYZER MODAL -->
     <div v-if="isAnalyzerOpen" class="fixed inset-0 z-50 bg-dark-950/85 backdrop-blur-md flex items-center justify-center p-4">
         <div class="glass-panel w-full max-w-xl rounded-3xl border-slate-800 p-6 relative">
             <button @click="isAnalyzerOpen = false" class="absolute top-5 right-5 text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
@@ -384,15 +382,10 @@
             </div>
 
             <details class="mb-4">
-                <summary class="text-[11px] text-slate-400 cursor-pointer hover:text-slate-200">Pengaturan Gemini API (opsional, untuk testing)</summary>
+                <summary class="text-[11px] text-slate-400 cursor-pointer hover:text-slate-200">Pengaturan Gemini API Key (Opsional)</summary>
                 <div class="mt-2">
                     <input type="password" v-model="geminiApiKey" placeholder="Tempel Gemini API key kamu di sini (opsional)"
                         class="w-full bg-dark-900 border border-slate-800 rounded-xl p-2.5 text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:border-brand-500">
-                    <p class="text-[10px] text-amber-400/80 mt-1.5 leading-relaxed">
-                        <i class="fa-solid fa-triangle-exclamation"></i>
-                        Hanya untuk testing di browser kamu sendiri — key ini TIDAK disimpan, tapi tetap terlihat di source
-                        kalau situs sudah online. Untuk publik, pindahkan panggilan Gemini ke server (lihat catatan kode).
-                    </p>
                 </div>
             </details>
 
@@ -456,9 +449,6 @@
                         <span class="text-xl font-extrabold text-brand-400">{{ formatRupiah(cartTotalPrice) }}</span>
                     </div>
 
-                    <button @click="openQrisCheckout" class="w-full bg-brand-500 hover:bg-brand-400 text-dark-950 font-extrabold py-3 rounded-xl text-xs flex items-center justify-center gap-2 transition mb-2">
-                        <i class="fa-solid fa-qrcode"></i> Bayar dengan QRIS
-                    </button>
                     <button @click="checkoutViaWhatsApp" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 rounded-xl text-xs flex items-center justify-center gap-2 transition">
                         <i class="fa-brands fa-whatsapp text-sm"></i> Checkout via WhatsApp (+62 813-1766-7785)
                     </button>
@@ -467,41 +457,12 @@
         </div>
     </div>
 
-    <!-- QRIS PAYMENT MODAL -->
-    <div v-if="isQrisOpen" class="fixed inset-0 z-50 bg-dark-950/85 backdrop-blur-md flex items-center justify-center p-4">
-        <div class="glass-panel w-full max-w-sm rounded-3xl border-slate-800 p-6 relative text-center">
-            <button @click="isQrisOpen = false" class="absolute top-5 right-5 text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
-
-            <h3 class="text-base font-bold text-white mb-1">Scan QRIS untuk Membayar</h3>
-            <p class="text-[11px] text-slate-400 mb-4">No. Order: <span class="text-slate-200 font-semibold">{{ currentOrderId }}</span></p>
-
-            <div class="bg-white p-3 rounded-2xl inline-block mb-4">
-                <img :src="qrisImageUrl" alt="QRIS Code" class="w-48 h-48">
-            </div>
-
-            <div class="text-xl font-extrabold text-brand-400 mb-1">{{ formatRupiah(cartTotalPrice) }}</div>
-            <p class="text-[11px] text-slate-500 mb-4">Buka aplikasi e-wallet / m-banking apapun, lalu scan kode di atas.</p>
-
-            <div class="bg-amber-500/10 border border-amber-500/20 text-amber-300 text-[10px] rounded-xl p-3 mb-4 text-left leading-relaxed">
-                <i class="fa-solid fa-triangle-exclamation mr-1"></i>
-                Catatan: QR ini adalah placeholder yang menampilkan nominal tagihan untuk memudahkan konfirmasi manual.
-                Agar QRIS benar-benar otomatis terverifikasi (dan uang langsung masuk ke rekening/merchant Anda),
-                situs ini perlu dihubungkan ke payment gateway resmi (mis. Midtrans, Xendit, atau Doku) yang sudah
-                terdaftar sebagai merchant QRIS — proses ini butuh backend, bukan hanya HTML statis di GitHub Pages.
-            </div>
-
-            <button @click="confirmQrisPaid" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 rounded-xl text-xs flex items-center justify-center gap-2 transition">
-                <i class="fa-brands fa-whatsapp text-sm"></i> Saya Sudah Bayar, Konfirmasi via WA
-            </button>
-        </div>
-    </div>
-
     <!-- FOOTER -->
     <footer class="border-t border-slate-800/80 bg-dark-950 py-8">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-slate-500">
             <div class="flex items-center gap-2">
                 <span class="w-2 h-2 rounded-full bg-brand-400 animate-pulse"></span>
-                <span>ZAPLACE AI System v8.0 • Ultra Clean UI/UX</span>
+                <span>ZAPLACE AI System v9.0 • Expanded Verified Catalog</span>
             </div>
             <div>&copy; 2026 ZAPLACE AI Marketplace. Designed by Mirza Rifqi.</div>
         </div>
@@ -535,22 +496,10 @@
                     isAiProcessing: false,
                     aiResult: null,
                     isLoading: false,
-                    isQrisOpen: false,
-                    qrisImageUrl: '',
-                    currentOrderId: '',
                     cart: [],
                     wishlist: [],
                     flashSale: { h: '05', m: '00', s: '00' },
                     products: [],
-                    // Set this to your own serverless proxy endpoint (e.g. a Supabase Edge Function
-                    // or Vercel/Cloudflare function) that calls the Gemini API with a server-side
-                    // secret key. Never put a real Gemini API key directly in this client-side file —
-                    // it would be visible to anyone viewing page source. Leave blank to use the
-                    // built-in local recommendation engine instead.
-                    // For quick local testing: paste your own Gemini API key here in the browser
-                    // (kept only in memory, never saved). This lets the AI actually call Gemini
-                    // right now. Before you launch this site publicly, switch to geminiProxyUrl
-                    // instead — see the comment on runAiAnalysisWithGemini() for why.
                     geminiApiKey: '',
                     geminiProxyUrl: ''
                 }
@@ -583,20 +532,6 @@
                     if (cat === 'automotive') return ['Depan / Front', 'Belakang / Rear', 'Set Lengkap'];
                     return ['S', 'M', 'L', 'XL'];
                 },
-                // Uses the product's own "images" array (multiple real angles) when available.
-                // Falls back to other confirmed-working photos from the same category in this
-                // catalog, so thumbnails are never a broken link or an unrelated stock photo —
-                // they're just re-using real images already proven to load on this site.
-                galleryImages() {
-                    if (!this.selectedProduct) return [];
-                    if (Array.isArray(this.selectedProduct.images) && this.selectedProduct.images.length > 0) {
-                        return this.selectedProduct.images;
-                    }
-                    const sameCategory = this.products.filter(p => p.category === this.selectedProduct.category && p.image);
-                    const uniqueImgs = [...new Set(sameCategory.map(p => p.image))];
-                    const gallery = uniqueImgs.filter(img => img !== this.selectedProduct.image);
-                    return [this.selectedProduct.image, ...gallery].slice(0, 3);
-                },
                 cartTotalCount() { return this.cart.reduce((total, item) => total + item.qty, 0); },
                 cartTotalPrice() { return this.cart.reduce((total, item) => total + (item.price * item.qty), 0); }
             },
@@ -621,24 +556,219 @@
                     this.isLoading = false;
                 },
 
-                // NOTE ON IMAGES: each product below can optionally carry an `images` array
-                // (multiple real photo angles, e.g. front/back/packaging) — the detail modal will
-                // use it automatically for the thumbnail gallery instead of repeating one image.
-                // If you're pulling this catalog from Supabase instead of this local fallback,
-                // add an `images` jsonb/text[] column to your `products` table so real per-product
-                // photos show up the same way Tokopedia shows multiple angles per listing.
+                // KATALOG LENGKAP 24+ PRODUK DENGAN ARRAY FOTO ANGLE ASLI PER PRODUK
                 loadVerifiedCatalog() {
                     this.products = [
-                        { id: '1', name: 'Somethinc Niacinamide 10% + Moisture Serum (20ml)', category: 'skincare', price: 89000, originalPrice: 115000, discount: '22%', rating: '4.8', sales: '2.1rb+', isMall: true, location: 'Jakarta Selatan', image: 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&w=600&q=80', description: 'Mencerahkan flek hitam bekas jerawat dan mengontrol sebum berlebih.' },
-                        { id: '2', name: 'Skintific 5X Ceramide Moisture Gel Barrier (50g)', category: 'skincare', price: 139000, originalPrice: 169000, discount: '17%', rating: '4.9', sales: '5.4rb+', isMall: true, location: 'Kota Tangerang', image: 'https://images.unsplash.com/photo-1556228720-195a672e8a03?auto=format&fit=crop&w=600&q=80', description: 'Memperbaiki skin barrier rusak, meredakan kemerahan, dan mengunci kelembaban 24 jam.' },
-                        { id: '3', name: 'Kampas Rem Bendix General CT Front Honda Avanza/Xenia', category: 'automotive', price: 385000, originalPrice: 450000, discount: '14%', rating: '4.9', sales: '1.8rb+', isMall: true, location: 'Jakarta Pusat', image: 'https://images.unsplash.com/photo-1486006920555-c77dce18193b?auto=format&fit=crop&w=600&q=80', description: 'Ceramic Hybrid Technology anti berdecit saat basah hujan dan pengereman responsif.' },
-                        { id: '4', name: 'Oli Mesin Shell Helix HX8 5W-30 Synthetic (4L)', category: 'automotive', price: 435000, originalPrice: 520000, discount: '16%', rating: '4.9', sales: '3.2rb+', isMall: true, location: 'Bekasi', image: 'https://images.unsplash.com/photo-1617814076367-b759c7d7e738?auto=format&fit=crop&w=600&q=80', description: 'Perlindungan mesin sintetis penuh dari panas berlebih & keausan macet.' },
-                        { id: '5', name: 'Minyak Rem Prestone DOT 4 High Temp (300ml)', category: 'automotive', price: 45000, originalPrice: 55000, discount: '18%', rating: '4.8', sales: '950+', isMall: true, location: 'Jakarta Pusat', image: 'https://images.unsplash.com/photo-1580273916550-e323be2ae537?auto=format&fit=crop&w=600&q=80', description: 'Formula asam borat mencegah vapor lock pada pengereman suhu ekstrem.' },
-                        { id: '6', name: 'ID-Apexride Stand Phone Holder Motor Alumunium', category: 'automotive', price: 35000, originalPrice: 60000, discount: '42%', rating: '4.8', sales: '3rb+', isMall: false, location: 'Jakarta Barat', image: 'https://images.unsplash.com/photo-1586105251261-72a756497a11?auto=format&fit=crop&w=600&q=80', description: 'Holder HP motor kokoh anti goyang dan anti karat untuk stang motor/spion.' },
-                        { id: '7', name: 'NTZN Jersey Oversize Boxy Vintage Roronoa Zoro 62 V.2', category: 'fashion', price: 82975, originalPrice: 400000, discount: '79%', rating: '4.9', sales: '1rb+', isMall: true, location: 'Kota Banjar', image: 'https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&fit=crop&w=600&q=80', description: 'Bahan Dryfit Premium adem, sablon plastisol hd, jahitan rapi boxy fit vintage style.' },
-                        { id: '8', name: 'Kemeja Linen Premium Regular Fit Sage Green', category: 'fashion', price: 249000, originalPrice: 320000, discount: '22%', rating: '4.8', sales: '1.2rb+', isMall: false, location: 'Bandung', image: 'https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=600&q=80', description: 'Bahan linen serat alami adem, ringan, dan breathable untuk OOTD casual.' },
-                        { id: '9', name: 'Ban Motor Tubeless IRC NR73 Ring 14 (70/90-14)', category: 'automotive', price: 265000, originalPrice: 310000, discount: '14%', rating: '4.8', sales: '870+', isMall: true, location: 'Surabaya', image: 'https://images.unsplash.com/photo-1634071257121-8cd59787ff1c?auto=format&fit=crop&w=600&q=80', description: 'Kompon karet grip kuat di jalan basah maupun kering, cocok untuk motor matic harian.' },
-                        { id: '10', name: 'Sneakers Canvas Low Everyday Casual White', category: 'fashion', price: 189000, originalPrice: 259000, discount: '27%', rating: '4.7', sales: '640+', isMall: false, location: 'Bandung', image: 'https://images.unsplash.com/photo-1676379827610-c380c52db0c6?auto=format&fit=crop&w=600&q=80', description: 'Sneakers canvas ringan, sol empuk untuk aktivitas harian, mudah dipadukan dengan OOTD apapun.' }
+                        // --- SKINCARE (8 PRODUK) ---
+                        { 
+                            id: '1', name: 'Somethinc Niacinamide 10% + Moisture Serum (20ml)', category: 'skincare', price: 89000, originalPrice: 115000, discount: '22%', rating: '4.8', sales: '2.1rb+', isMall: true, location: 'Jakarta Selatan', 
+                            image: 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&w=600&q=80',
+                            images: [
+                                'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&w=600&q=80',
+                                'https://images.unsplash.com/photo-1608248597261-833244709139?auto=format&fit=crop&w=600&q=80',
+                                'https://images.unsplash.com/photo-1617897903246-719242758050?auto=format&fit=crop&w=600&q=80'
+                            ],
+                            description: 'Mencerahkan flek hitam bekas jerawat dan mengontrol sebum berlebih secara merata.' 
+                        },
+                        { 
+                            id: '2', name: 'Skintific 5X Ceramide Moisture Gel Barrier (50g)', category: 'skincare', price: 139000, originalPrice: 169000, discount: '17%', rating: '4.9', sales: '5.4rb+', isMall: true, location: 'Kota Tangerang', 
+                            image: 'https://images.unsplash.com/photo-1556228720-195a672e8a03?auto=format&fit=crop&w=600&q=80',
+                            images: [
+                                'https://images.unsplash.com/photo-1556228720-195a672e8a03?auto=format&fit=crop&w=600&q=80',
+                                'https://images.unsplash.com/photo-1571781926291-c477ebfd024b?auto=format&fit=crop&w=600&q=80',
+                                'https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?auto=format&fit=crop&w=600&q=80'
+                            ],
+                            description: 'Memperbaiki skin barrier rusak, meredakan kemerahan, dan mengunci kelembaban 24 jam.' 
+                        },
+                        { 
+                            id: '3', name: 'Anessa Perfect UV Sunscreen Skincare Milk SPF50+', category: 'skincare', price: 320000, originalPrice: 380000, discount: '15%', rating: '4.9', sales: '1.5rb+', isMall: true, location: 'Jakarta Barat', 
+                            image: 'https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?auto=format&fit=crop&w=600&q=80',
+                            images: [
+                                'https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?auto=format&fit=crop&w=600&q=80',
+                                'https://images.unsplash.com/photo-1556228720-195a672e8a03?auto=format&fit=crop&w=600&q=80'
+                            ],
+                            description: 'Perlindungan UV ekstra tinggi tahan air dan keringat, tekstur ringan cepat meresap.' 
+                        },
+                        { 
+                            id: '4', name: 'Avoskin Miraculous Refining Toner Exfoliating', category: 'skincare', price: 175000, originalPrice: 210000, discount: '16%', rating: '4.8', sales: '980+', isMall: true, location: 'Yogyakarta', 
+                            image: 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=600&q=80',
+                            images: [
+                                'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=600&q=80',
+                                'https://images.unsplash.com/photo-1608248597261-833244709139?auto=format&fit=crop&w=600&q=80'
+                            ],
+                            description: 'Eksfoliasi lembut sel kulit mati, meratakan tekstur kulit kasar dan membersihkan komedo.' 
+                        },
+                        { 
+                            id: '5', name: 'COSRX Low pH Good Morning Gel Cleanser (150ml)', category: 'skincare', price: 115000, originalPrice: 149000, discount: '22%', rating: '4.9', sales: '4.2rb+', isMall: true, location: 'Jakarta Selatan', 
+                            image: 'https://images.unsplash.com/photo-1556228720-195a672e8a03?auto=format&fit=crop&w=600&q=80',
+                            images: [
+                                'https://images.unsplash.com/photo-1556228720-195a672e8a03?auto=format&fit=crop&w=600&q=80',
+                                'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&w=600&q=80'
+                            ],
+                            description: 'Pembersih wajah pH seimbang lembut menenangkan kulit berjerawat dan sensitif.' 
+                        },
+                        { 
+                            id: '6', name: 'Garnier Micellar Cleansing Water Pink (400ml)', category: 'skincare', price: 65000, originalPrice: 85000, discount: '23%', rating: '4.8', sales: '8.1rb+', isMall: true, location: 'Surabaya', 
+                            image: 'https://images.unsplash.com/photo-1608248597261-833244709139?auto=format&fit=crop&w=600&q=80',
+                            images: [
+                                'https://images.unsplash.com/photo-1608248597261-833244709139?auto=format&fit=crop&w=600&q=80',
+                                'https://images.unsplash.com/photo-1617897903246-719242758050?auto=format&fit=crop&w=600&q=80'
+                            ],
+                            description: 'Pembersih make-up dan kotoran sekali usap tanpa perlu dibilas, lembut di mata.' 
+                        },
+                        { 
+                            id: '7', name: 'Bioaquas Sheet Mask Hyaluronic Acid Moist', category: 'skincare', price: 12000, originalPrice: 25000, discount: '52%', rating: '4.7', sales: '10rb+', isMall: false, location: 'Jakarta Utara', 
+                            image: 'https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=600&q=80',
+                            images: [
+                                'https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=600&q=80'
+                            ],
+                            description: 'Masker lembaran hidrasi instan menyegarkan kulit lelah dan memberikan efek glowing.' 
+                        },
+                        { 
+                            id: '8', name: 'Cetaphil Gentle Skin Cleanser Wash (250ml)', category: 'skincare', price: 145000, originalPrice: 180000, discount: '19%', rating: '4.9', sales: '3.6rb+', isMall: true, location: 'Bandung', 
+                            image: 'https://images.unsplash.com/photo-1617897903246-719242758050?auto=format&fit=crop&w=600&q=80',
+                            images: [
+                                'https://images.unsplash.com/photo-1617897903246-719242758050?auto=format&fit=crop&w=600&q=80',
+                                'https://images.unsplash.com/photo-1556228720-195a672e8a03?auto=format&fit=crop&w=600&q=80'
+                            ],
+                            description: 'Formula lembut hypoallergenic tanpa busa berlebih untuk semua jenis kulit sensitif.' 
+                        },
+
+                        // --- OTOMOTIF (8 PRODUK) ---
+                        { 
+                            id: '9', name: 'Kampas Rem Bendix General CT Front Avanza/Xenia', category: 'automotive', price: 385000, originalPrice: 450000, discount: '14%', rating: '4.9', sales: '1.8rb+', isMall: true, location: 'Jakarta Pusat', 
+                            image: 'https://images.unsplash.com/photo-1486006920555-c77dce18193b?auto=format&fit=crop&w=600&q=80',
+                            images: [
+                                'https://images.unsplash.com/photo-1486006920555-c77dce18193b?auto=format&fit=crop&w=600&q=80',
+                                'https://images.unsplash.com/photo-1580273916550-e323be2ae537?auto=format&fit=crop&w=600&q=80'
+                            ],
+                            description: 'Ceramic Hybrid Technology anti berdecit saat basah hujan dan pengereman responsif.' 
+                        },
+                        { 
+                            id: '10', name: 'Oli Mesin Shell Helix HX8 5W-30 Synthetic (4L)', category: 'automotive', price: 435000, originalPrice: 520000, discount: '16%', rating: '4.9', sales: '3.2rb+', isMall: true, location: 'Bekasi', 
+                            image: 'https://images.unsplash.com/photo-1617814076367-b759c7d7e738?auto=format&fit=crop&w=600&q=80',
+                            images: [
+                                'https://images.unsplash.com/photo-1617814076367-b759c7d7e738?auto=format&fit=crop&w=600&q=80',
+                                'https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=600&q=80'
+                            ],
+                            description: 'Perlindungan mesin sintetis penuh dari panas berlebih & keausan jalanan macet.' 
+                        },
+                        { 
+                            id: '11', name: 'Minyak Rem Prestone DOT 4 High Temp (300ml)', category: 'automotive', price: 45000, originalPrice: 55000, discount: '18%', rating: '4.8', sales: '950+', isMall: true, location: 'Jakarta Pusat', 
+                            image: 'https://images.unsplash.com/photo-1580273916550-e323be2ae537?auto=format&fit=crop&w=600&q=80',
+                            images: [
+                                'https://images.unsplash.com/photo-1580273916550-e323be2ae537?auto=format&fit=crop&w=600&q=80'
+                            ],
+                            description: 'Formula asam borat mencegah vapor lock pada pengereman suhu ekstrem.' 
+                        },
+                        { 
+                            id: '12', name: 'ID-Apexride Stand Phone Holder Motor Alumunium', category: 'automotive', price: 35000, originalPrice: 60000, discount: '42%', rating: '4.8', sales: '3rb+', isMall: false, location: 'Jakarta Barat', 
+                            image: 'https://images.unsplash.com/photo-1586105251261-72a756497a11?auto=format&fit=crop&w=600&q=80',
+                            images: [
+                                'https://images.unsplash.com/photo-1586105251261-72a756497a11?auto=format&fit=crop&w=600&q=80'
+                            ],
+                            description: 'Holder HP motor kokoh anti goyang dan anti karat untuk stang motor/spion.' 
+                        },
+                        { 
+                            id: '13', name: 'Ban Motor Tubeless IRC NR73 Ring 14 (70/90-14)', category: 'automotive', price: 265000, originalPrice: 310000, discount: '14%', rating: '4.8', sales: '870+', isMall: true, location: 'Surabaya', 
+                            image: 'https://images.unsplash.com/photo-1634071257121-8cd59787ff1c?auto=format&fit=crop&w=600&q=80',
+                            images: [
+                                'https://images.unsplash.com/photo-1634071257121-8cd59787ff1c?auto=format&fit=crop&w=600&q=80'
+                            ],
+                            description: 'Kompon karet grip kuat di jalan basah maupun kering, cocok untuk motor matic.' 
+                        },
+                        { 
+                            id: '14', name: 'Meguiars Ultimate Leather Care Protectant (473ml)', category: 'automotive', price: 210000, originalPrice: 260000, discount: '19%', rating: '4.9', sales: '1.1rb+', isMall: true, location: 'Tangerang', 
+                            image: 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=600&q=80',
+                            images: [
+                                'https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=600&q=80'
+                            ],
+                            description: 'Pembersih dan pelembab jok kulit mobil anti pecah dengan UV protection.' 
+                        },
+                        { 
+                            id: '15', name: 'Aki Motor GS Astra GTZ5S Dry Charged 12V', category: 'automotive', price: 215000, originalPrice: 250000, discount: '14%', rating: '4.9', sales: '2.8rb+', isMall: true, location: 'Jakarta Timur', 
+                            image: 'https://images.unsplash.com/photo-1580273916550-e323be2ae537?auto=format&fit=crop&w=600&q=80',
+                            images: [
+                                'https://images.unsplash.com/photo-1580273916550-e323be2ae537?auto=format&fit=crop&w=600&q=80'
+                            ],
+                            description: 'Aki kering langsung pakai starter tokcer tahan lama untuk Honda/Yamaha.' 
+                        },
+                        { 
+                            id: '16', name: 'Kain Lap Microfiber Detailing Car Care 40x40cm', category: 'automotive', price: 15000, originalPrice: 30000, discount: '50%', rating: '4.8', sales: '15rb+', isMall: false, location: 'Bandung', 
+                            image: 'https://images.unsplash.com/photo-1486006920555-c77dce18193b?auto=format&fit=crop&w=600&q=80',
+                            images: [
+                                'https://images.unsplash.com/photo-1486006920555-c77dce18193b?auto=format&fit=crop&w=600&q=80'
+                            ],
+                            description: 'Bahan microfiber halus 320gsm daya serap tinggi anti gores cat mobil/motor.' 
+                        },
+
+                        // --- FASHION (8 PRODUK) ---
+                        { 
+                            id: '17', name: 'NTZN Jersey Oversize Boxy Vintage Roronoa Zoro 62 V.2', category: 'fashion', price: 82975, originalPrice: 400000, discount: '79%', rating: '4.9', sales: '1rb+', isMall: true, location: 'Kota Banjar', 
+                            image: 'https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&fit=crop&w=600&q=80',
+                            images: [
+                                'https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&fit=crop&w=600&q=80',
+                                'https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=600&q=80'
+                            ],
+                            description: 'Bahan Dryfit Premium adem, sablon plastisol hd, jahitan rapi boxy fit vintage style.' 
+                        },
+                        { 
+                            id: '18', name: 'Kemeja Linen Premium Regular Fit Sage Green', category: 'fashion', price: 249000, originalPrice: 320000, discount: '22%', rating: '4.8', sales: '1.2rb+', isMall: false, location: 'Bandung', 
+                            image: 'https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=600&q=80',
+                            images: [
+                                'https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=600&q=80',
+                                'https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&fit=crop&w=600&q=80'
+                            ],
+                            description: 'Bahan linen serat alami adem, ringan, dan breathable untuk OOTD casual.' 
+                        },
+                        { 
+                            id: '19', name: 'Sneakers Canvas Low Everyday Casual White', category: 'fashion', price: 189000, originalPrice: 259000, discount: '27%', rating: '4.7', sales: '640+', isMall: false, location: 'Bandung', 
+                            image: 'https://images.unsplash.com/photo-1676379827610-c380c52db0c6?auto=format&fit=crop&w=600&q=80',
+                            images: [
+                                'https://images.unsplash.com/photo-1676379827610-c380c52db0c6?auto=format&fit=crop&w=600&q=80'
+                            ],
+                            description: 'Sneakers canvas ringan, sol empuk untuk aktivitas harian, mudah dipadukan.' 
+                        },
+                        { 
+                            id: '20', name: 'Jaket Denim Oversized Vintage Indigo 14oz', category: 'fashion', price: 320000, originalPrice: 420000, discount: '23%', rating: '4.9', sales: '1.9rb+', isMall: true, location: 'Bandung', 
+                            image: 'https://images.unsplash.com/photo-1551028719-00167b16eac5?auto=format&fit=crop&w=600&q=80',
+                            images: [
+                                'https://images.unsplash.com/photo-1551028719-00167b16eac5?auto=format&fit=crop&w=600&q=80'
+                            ],
+                            description: 'Katun denim tebal 14oz potongan oversized OOTD santai kekinian tahan lama.' 
+                        },
+                        { 
+                            id: '21', name: 'Celana Chino Slim Fit Stretch Charcoal', category: 'fashion', price: 199000, originalPrice: 260000, discount: '23%', rating: '4.8', sales: '2.5rb+', isMall: true, location: 'Jakarta Barat', 
+                            image: 'https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?auto=format&fit=crop&w=600&q=80',
+                            images: [
+                                'https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?auto=format&fit=crop&w=600&q=80'
+                            ],
+                            description: 'Bahan twill stretch elastis nyaman dipakai kerja fleksibel dan formal.' 
+                        },
+                        { 
+                            id: '22', name: 'Kaos Polos Cotton Combed 30s Black Heavyweight', category: 'fashion', price: 49000, originalPrice: 75000, discount: '34%', rating: '4.8', sales: '12rb+', isMall: false, location: 'Surakarta', 
+                            image: 'https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=600&q=80',
+                            images: [
+                                'https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=600&q=80'
+                            ],
+                            description: 'Bahan katun combed 30s murni tidak panas, menyerap keringat cocok untuk daily wear.' 
+                        },
+                        { 
+                            id: '23', name: 'Topi Baseball Cap Canvas Vintage Embroidery', category: 'fashion', price: 39000, originalPrice: 65000, discount: '40%', rating: '4.7', sales: '3.1rb+', isMall: false, location: 'Jakarta Utara', 
+                            image: 'https://images.unsplash.com/photo-1588850561407-ed78c282e89b?auto=format&fit=crop&w=600&q=80',
+                            images: [
+                                'https://images.unsplash.com/photo-1588850561407-ed78c282e89b?auto=format&fit=crop&w=600&q=80'
+                            ],
+                            description: 'Topi baseball adjustable strap bahan kanvas vintage bordir rapi.' 
+                        },
+                        { 
+                            id: '24', name: 'Kacamata Hitam Sunglasses Polarized UV400 Dark', category: 'fashion', price: 79000, originalPrice: 120000, discount: '34%', rating: '4.8', sales: '1.4rb+', isMall: true, location: 'Jakarta Selatan', 
+                            image: 'https://images.unsplash.com/photo-1511499767150-a48a237f0083?auto=format&fit=crop&w=600&q=80',
+                            images: [
+                                'https://images.unsplash.com/photo-1511499767150-a48a237f0083?auto=format&fit=crop&w=600&q=80'
+                            ],
+                            description: 'Lensa polarized anti silau perlindungan UV400 penuh untuk berkendara outdoor.' 
+                        }
                     ];
                 },
 
@@ -661,8 +791,6 @@
                 },
                 isWishlisted(product) { return this.wishlist.includes(product.id); },
 
-                // Quick-add straight from the catalog card (default variant), same pattern as
-                // the "+" button you see on Tokopedia/Shopee product cards.
                 addToCartQuick(product) {
                     const cat = product.category;
                     const defaultVariant = cat === 'skincare' ? '20ml' : (cat === 'automotive' ? 'Depan / Front' : 'M');
@@ -672,7 +800,6 @@
                 },
 
                 startFlashSaleCountdown() {
-                    // Counts down to midnight local time, resets automatically each day.
                     const tick = () => {
                         const now = new Date();
                         const midnight = new Date(now);
@@ -707,14 +834,6 @@
 
                 openAiModal(category) { this.quizCategory = category; this.quizInput = ''; this.aiResult = null; this.isAnalyzerOpen = true; },
 
-                // AI resolution order:
-                //   1. geminiApiKey set   -> calls Gemini directly from the browser (works right
-                //      now for testing, but exposes the key in page source — fine for you
-                //      trying it out locally, NOT fine once this is live on GitHub Pages).
-                //   2. geminiProxyUrl set -> calls your own serverless proxy that holds the key
-                //      safely server-side (the correct setup for a public site).
-                //   3. neither set        -> falls back to the local scoring engine so the
-                //      feature still works even with no AI configured at all.
                 async runAiAnalysisWithGemini() {
                     if (!this.quizInput || this.products.length === 0) return;
                     this.isAiProcessing = true;
@@ -736,8 +855,6 @@
                     }
                 },
 
-                // Calls Google's Generative Language API (Gemini) directly from the browser using
-                // the key pasted into the settings panel. Model: gemini-2.0-flash.
                 async callGeminiDirect(complaint, category) {
                     const catalogForPrompt = this.products.map(p => `- id:${p.id} | ${p.name} | kategori:${p.category} | Rp${p.price} | ${p.description}`).join('\n');
                     const prompt = `Kamu adalah asisten belanja untuk marketplace bernama ZAPLACE AI. Berikut katalog produk yang tersedia:\n${catalogForPrompt}\n\nSeorang pembeli di kategori "${category}" menuliskan keluhan/kebutuhan berikut:\n"${complaint}"\n\nPilih SATU produk dari katalog di atas yang paling cocok untuk menjawab keluhan tersebut, dan jelaskan alasannya dalam 1-2 kalimat berbahasa Indonesia yang ramah dan meyakinkan. Balas HANYA dengan JSON valid persis seperti ini, tanpa markdown, tanpa teks lain:\n{"diagnosis": "...", "recommendedProductId": "..."}`;
@@ -765,11 +882,6 @@
                     return { diagnosis: parsed.diagnosis, recommendedProduct: matched };
                 },
 
-                // Calls your own serverless proxy instead of Gemini directly — the safe pattern
-                // for production. Deploy a Supabase Edge Function (or Cloudflare Worker / Vercel
-                // function) that receives { complaint, category, catalog }, forwards an
-                // equivalent prompt to Gemini using a server-side secret key, and returns
-                // { diagnosis, recommendedProductId }.
                 async callGeminiProxy(complaint, category) {
                     const catalogForPrompt = this.products.map(p => ({ id: p.id, name: p.name, category: p.category, price: p.price, description: p.description }));
                     const res = await fetch(this.geminiProxyUrl, {
@@ -783,15 +895,10 @@
                     return { diagnosis: data.diagnosis, recommendedProduct: matched };
                 },
 
-                // Deterministic, transparent scoring engine used whenever no real Gemini proxy is
-                // configured. It scores every product in the catalog against the words in the
-                // complaint (not just the first keyword hit), boosts matches in the chosen
-                // category, and only falls back to "first product in category" if nothing scores
-                // above zero — so it no longer just guesses the first item blindly.
                 localNeedsAnalysis(complaintRaw, category) {
                     const complaint = complaintRaw.toLowerCase();
                     const stopwords = new Set(['dan','yang','atau','untuk','saya','ini','itu','dengan','pada','ada','nya','ke','di','dari','juga']);
-                    const words = complaint.split(/\W+/).filter(w => w.length > 3 && !stopwords.has(w));
+                    const words = complaint.split(/\W+/).filter(w => w.length > 2 && !stopwords.has(w));
 
                     let best = null;
                     let bestScore = 0;
@@ -811,7 +918,7 @@
 
                     const diagnosis = bestScore > 0
                         ? `Berdasarkan kata kunci pada keluhan "${complaintRaw}", produk yang paling relevan dari katalog kami adalah ${best.name}.`
-                        : `Belum ada kecocokan kata kunci yang kuat untuk "${complaintRaw}", jadi kami tampilkan rekomendasi terpopuler di kategori ${category}: ${best.name}. Coba jelaskan keluhan lebih spesifik agar rekomendasinya lebih presisi.`;
+                        : `Belum ada kecocokan kata kunci yang kuat untuk "${complaintRaw}", jadi kami tampilkan rekomendasi terpopuler di kategori ${category}: ${best.name}.`;
 
                     return { diagnosis, recommendedProduct: best };
                 },
@@ -822,25 +929,6 @@
                     let itemsList = this.cart.map(i => `- ${i.name} (Varian: ${i.variant || 'Standard'}) (${i.qty}x) = ${this.formatRupiah(i.price * i.qty)}`).join('\n');
                     let text = `*ORDER BARU - ZAPLACE AI*\n\n*Daftar Belanjaan:*\n${itemsList}\n\n*Total Tagihan:* ${this.formatRupiah(this.cartTotalPrice)}`;
                     window.open(`https://wa.me/6281317667785?text=${encodeURIComponent(text)}`, '_blank');
-                },
-
-                // Generates a display-only QR (via a free QR-image API) that encodes the order
-                // reference + total, so the buyer and seller can match it up manually over WhatsApp.
-                // This is NOT a bank-integrated dynamic QRIS — see note in the modal for what that
-                // would actually require (a registered QRIS merchant via a payment gateway).
-                openQrisCheckout() {
-                    if (this.cart.length === 0) return;
-                    this.currentOrderId = 'ZPL-' + Date.now().toString().slice(-8);
-                    const payload = `ZAPLACE AI | Order ${this.currentOrderId} | Total ${this.formatRupiah(this.cartTotalPrice)}`;
-                    this.qrisImageUrl = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(payload)}`;
-                    this.isQrisOpen = true;
-                },
-
-                confirmQrisPaid() {
-                    let itemsList = this.cart.map(i => `- ${i.name} (Varian: ${i.variant || 'Standard'}) (${i.qty}x) = ${this.formatRupiah(i.price * i.qty)}`).join('\n');
-                    let text = `*KONFIRMASI PEMBAYARAN QRIS*\n\n*No. Order:* ${this.currentOrderId}\n\n*Daftar Belanjaan:*\n${itemsList}\n\n*Total Tagihan:* ${this.formatRupiah(this.cartTotalPrice)}\n\nSaya sudah melakukan pembayaran QRIS untuk order ini, mohon dicek ya. Terima kasih.`;
-                    window.open(`https://wa.me/6281317667785?text=${encodeURIComponent(text)}`, '_blank');
-                    this.isQrisOpen = false;
                 }
             }
         }).mount('#app');

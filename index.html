@@ -175,6 +175,21 @@
         </div>
     </section>
 
+    <!-- FLASH SALE BANNER (TOKOPEDIA/SHOPEE STYLE) -->
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-2">
+        <div class="bg-gradient-to-r from-rose-600 via-rose-500 to-orange-500 rounded-2xl px-5 py-3 flex items-center justify-between flex-wrap gap-3">
+            <div class="flex items-center gap-2 text-white font-extrabold text-sm">
+                <i class="fa-solid fa-bolt"></i> Flash Sale Hari Ini
+            </div>
+            <div class="flex items-center gap-1.5 text-white">
+                <span class="bg-dark-950/30 rounded-lg px-2 py-1 text-xs font-bold min-w-[2rem] text-center">{{ flashSale.h }}</span>:
+                <span class="bg-dark-950/30 rounded-lg px-2 py-1 text-xs font-bold min-w-[2rem] text-center">{{ flashSale.m }}</span>:
+                <span class="bg-dark-950/30 rounded-lg px-2 py-1 text-xs font-bold min-w-[2rem] text-center">{{ flashSale.s }}</span>
+            </div>
+            <span class="text-[11px] text-white/90">Diskon s.d. 79% • Berakhir hari ini</span>
+        </div>
+    </section>
+
     <!-- CATALOG GRID (TOKOPEDIA / SHOPEE HIGH DENSITY MATCH) -->
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 mb-16">
         <div class="flex items-center justify-between mb-6">
@@ -190,7 +205,7 @@
         <div v-if="filteredProducts.length > 0" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
             <div v-for="product in filteredProducts" :key="product.id" 
                 @click="openProductDetail(product)"
-                class="product-card glass-card rounded-2xl overflow-hidden border-slate-800/80 cursor-pointer flex flex-col justify-between">
+                class="product-card group glass-card rounded-2xl overflow-hidden border-slate-800/80 cursor-pointer flex flex-col justify-between relative">
                 
                 <div>
                     <!-- Product Image Container -->
@@ -202,11 +217,24 @@
                         <span v-if="product.isMall" class="absolute bottom-2 left-2 bg-indigo-600 text-white text-[9px] font-bold px-1.5 py-0.5 rounded flex items-center gap-1">
                             <i class="fa-solid fa-circle-check"></i> Official
                         </span>
+
+                        <!-- Wishlist heart -->
+                        <button @click.stop="toggleWishlist(product)"
+                            class="absolute top-2 right-2 w-7 h-7 rounded-full bg-dark-950/70 backdrop-blur flex items-center justify-center text-xs transition"
+                            :class="isWishlisted(product) ? 'text-rose-400' : 'text-slate-300 hover:text-rose-300'">
+                            <i :class="isWishlisted(product) ? 'fa-solid' : 'fa-regular'" class="fa-heart"></i>
+                        </button>
+
+                        <!-- Quick add to cart, appears on hover like Shopee/Tokopedia -->
+                        <button @click.stop="addToCartQuick(product)"
+                            class="absolute bottom-2 right-2 w-8 h-8 rounded-full bg-brand-500 text-dark-950 flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition shadow-lg shadow-brand-500/30">
+                            <i class="fa-solid fa-cart-plus"></i>
+                        </button>
                     </div>
 
                     <!-- Details -->
                     <div class="p-3">
-                        <h3 class="text-xs font-semibold text-slate-100 line-clamp-2 leading-snug mb-1 hover:text-brand-300 transition">{{ product.name }}</h3>
+                        <h3 class="text-xs font-semibold text-slate-100 line-clamp-2 leading-snug mb-1 hover:text-brand-300 transition min-h-[2.4em]">{{ product.name }}</h3>
                         
                         <div class="mb-2">
                             <span class="text-sm font-extrabold text-white block">{{ formatRupiah(product.price) }}</span>
@@ -219,13 +247,22 @@
                             <span>• {{ product.sales }} terjual</span>
                         </div>
 
-                        <div class="flex items-center gap-1 text-[10px] text-slate-500">
-                            <i class="fa-solid fa-shop text-brand-400"></i>
-                            <span class="truncate">{{ product.location || 'Jakarta' }}</span>
+                        <div class="flex items-center justify-between gap-1 text-[10px] text-slate-500">
+                            <span class="flex items-center gap-1 truncate">
+                                <i class="fa-solid fa-shop text-brand-400"></i>
+                                <span class="truncate">{{ product.location || 'Jakarta' }}</span>
+                            </span>
+                            <span class="flex items-center gap-1 text-brand-400 font-semibold shrink-0">
+                                <i class="fa-solid fa-truck-fast"></i> Ongkir
+                            </span>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
+        <div v-else class="text-center py-20 text-slate-500 text-xs">
+            <i class="fa-solid fa-box-open text-2xl mb-2 block"></i>
+            Produk tidak ditemukan untuk pencarian/kategori ini.
         </div>
     </main>
 
@@ -248,9 +285,10 @@
                         <img :src="activePreviewImage || selectedProduct.image" class="w-full h-full object-cover">
                     </div>
                     <div class="flex gap-2">
-                        <div v-for="img in [selectedProduct.image, selectedProduct.image, selectedProduct.image]" :key="img"
+                        <div v-for="(img, idx) in galleryImages" :key="idx"
                             @click="activePreviewImage = img"
-                            class="w-16 h-16 rounded-xl border border-slate-800 overflow-hidden cursor-pointer hover:border-brand-400 transition">
+                            :class="activePreviewImage === img ? 'border-brand-400' : 'border-slate-800'"
+                            class="w-16 h-16 rounded-xl border overflow-hidden cursor-pointer hover:border-brand-400 transition">
                             <img :src="img" class="w-full h-full object-cover">
                         </div>
                     </div>
@@ -345,6 +383,19 @@
                     class="w-full bg-dark-900 border border-slate-800 rounded-xl p-3 text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:border-brand-500"></textarea>
             </div>
 
+            <details class="mb-4">
+                <summary class="text-[11px] text-slate-400 cursor-pointer hover:text-slate-200">Pengaturan Gemini API (opsional, untuk testing)</summary>
+                <div class="mt-2">
+                    <input type="password" v-model="geminiApiKey" placeholder="Tempel Gemini API key kamu di sini (opsional)"
+                        class="w-full bg-dark-900 border border-slate-800 rounded-xl p-2.5 text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:border-brand-500">
+                    <p class="text-[10px] text-amber-400/80 mt-1.5 leading-relaxed">
+                        <i class="fa-solid fa-triangle-exclamation"></i>
+                        Hanya untuk testing di browser kamu sendiri — key ini TIDAK disimpan, tapi tetap terlihat di source
+                        kalau situs sudah online. Untuk publik, pindahkan panggilan Gemini ke server (lihat catatan kode).
+                    </p>
+                </div>
+            </details>
+
             <button @click="runAiAnalysisWithGemini" :disabled="isAiProcessing" class="w-full bg-brand-500 hover:bg-brand-400 text-dark-950 font-extrabold text-xs py-3.5 rounded-xl transition flex items-center justify-center gap-2">
                 <i class="fa-solid" :class="isAiProcessing ? 'fa-spinner fa-spin' : 'fa-sparkles'"></i>
                 <span>{{ isAiProcessing ? 'Gemini AI Sedang Meracik Solusi...' : 'Tanyakan ke Gemini AI' }}</span>
@@ -405,11 +456,43 @@
                         <span class="text-xl font-extrabold text-brand-400">{{ formatRupiah(cartTotalPrice) }}</span>
                     </div>
 
+                    <button @click="openQrisCheckout" class="w-full bg-brand-500 hover:bg-brand-400 text-dark-950 font-extrabold py-3 rounded-xl text-xs flex items-center justify-center gap-2 transition mb-2">
+                        <i class="fa-solid fa-qrcode"></i> Bayar dengan QRIS
+                    </button>
                     <button @click="checkoutViaWhatsApp" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 rounded-xl text-xs flex items-center justify-center gap-2 transition">
                         <i class="fa-brands fa-whatsapp text-sm"></i> Checkout via WhatsApp (+62 813-1766-7785)
                     </button>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <!-- QRIS PAYMENT MODAL -->
+    <div v-if="isQrisOpen" class="fixed inset-0 z-50 bg-dark-950/85 backdrop-blur-md flex items-center justify-center p-4">
+        <div class="glass-panel w-full max-w-sm rounded-3xl border-slate-800 p-6 relative text-center">
+            <button @click="isQrisOpen = false" class="absolute top-5 right-5 text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+
+            <h3 class="text-base font-bold text-white mb-1">Scan QRIS untuk Membayar</h3>
+            <p class="text-[11px] text-slate-400 mb-4">No. Order: <span class="text-slate-200 font-semibold">{{ currentOrderId }}</span></p>
+
+            <div class="bg-white p-3 rounded-2xl inline-block mb-4">
+                <img :src="qrisImageUrl" alt="QRIS Code" class="w-48 h-48">
+            </div>
+
+            <div class="text-xl font-extrabold text-brand-400 mb-1">{{ formatRupiah(cartTotalPrice) }}</div>
+            <p class="text-[11px] text-slate-500 mb-4">Buka aplikasi e-wallet / m-banking apapun, lalu scan kode di atas.</p>
+
+            <div class="bg-amber-500/10 border border-amber-500/20 text-amber-300 text-[10px] rounded-xl p-3 mb-4 text-left leading-relaxed">
+                <i class="fa-solid fa-triangle-exclamation mr-1"></i>
+                Catatan: QR ini adalah placeholder yang menampilkan nominal tagihan untuk memudahkan konfirmasi manual.
+                Agar QRIS benar-benar otomatis terverifikasi (dan uang langsung masuk ke rekening/merchant Anda),
+                situs ini perlu dihubungkan ke payment gateway resmi (mis. Midtrans, Xendit, atau Doku) yang sudah
+                terdaftar sebagai merchant QRIS — proses ini butuh backend, bukan hanya HTML statis di GitHub Pages.
+            </div>
+
+            <button @click="confirmQrisPaid" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 rounded-xl text-xs flex items-center justify-center gap-2 transition">
+                <i class="fa-brands fa-whatsapp text-sm"></i> Saya Sudah Bayar, Konfirmasi via WA
+            </button>
         </div>
     </div>
 
@@ -452,8 +535,24 @@
                     isAiProcessing: false,
                     aiResult: null,
                     isLoading: false,
+                    isQrisOpen: false,
+                    qrisImageUrl: '',
+                    currentOrderId: '',
                     cart: [],
-                    products: []
+                    wishlist: [],
+                    flashSale: { h: '05', m: '00', s: '00' },
+                    products: [],
+                    // Set this to your own serverless proxy endpoint (e.g. a Supabase Edge Function
+                    // or Vercel/Cloudflare function) that calls the Gemini API with a server-side
+                    // secret key. Never put a real Gemini API key directly in this client-side file —
+                    // it would be visible to anyone viewing page source. Leave blank to use the
+                    // built-in local recommendation engine instead.
+                    // For quick local testing: paste your own Gemini API key here in the browser
+                    // (kept only in memory, never saved). This lets the AI actually call Gemini
+                    // right now. Before you launch this site publicly, switch to geminiProxyUrl
+                    // instead — see the comment on runAiAnalysisWithGemini() for why.
+                    geminiApiKey: '',
+                    geminiProxyUrl: ''
                 }
             },
 
@@ -464,6 +563,7 @@
                 });
 
                 this.fetchProductsFromSupabase();
+                this.startFlashSaleCountdown();
             },
 
             computed: {
@@ -482,6 +582,20 @@
                     if (cat === 'skincare') return ['20ml', '50ml', '100ml'];
                     if (cat === 'automotive') return ['Depan / Front', 'Belakang / Rear', 'Set Lengkap'];
                     return ['S', 'M', 'L', 'XL'];
+                },
+                // Uses the product's own "images" array (multiple real angles) when available.
+                // Falls back to other confirmed-working photos from the same category in this
+                // catalog, so thumbnails are never a broken link or an unrelated stock photo —
+                // they're just re-using real images already proven to load on this site.
+                galleryImages() {
+                    if (!this.selectedProduct) return [];
+                    if (Array.isArray(this.selectedProduct.images) && this.selectedProduct.images.length > 0) {
+                        return this.selectedProduct.images;
+                    }
+                    const sameCategory = this.products.filter(p => p.category === this.selectedProduct.category && p.image);
+                    const uniqueImgs = [...new Set(sameCategory.map(p => p.image))];
+                    const gallery = uniqueImgs.filter(img => img !== this.selectedProduct.image);
+                    return [this.selectedProduct.image, ...gallery].slice(0, 3);
                 },
                 cartTotalCount() { return this.cart.reduce((total, item) => total + item.qty, 0); },
                 cartTotalPrice() { return this.cart.reduce((total, item) => total + (item.price * item.qty), 0); }
@@ -507,6 +621,12 @@
                     this.isLoading = false;
                 },
 
+                // NOTE ON IMAGES: each product below can optionally carry an `images` array
+                // (multiple real photo angles, e.g. front/back/packaging) — the detail modal will
+                // use it automatically for the thumbnail gallery instead of repeating one image.
+                // If you're pulling this catalog from Supabase instead of this local fallback,
+                // add an `images` jsonb/text[] column to your `products` table so real per-product
+                // photos show up the same way Tokopedia shows multiple angles per listing.
                 loadVerifiedCatalog() {
                     this.products = [
                         { id: '1', name: 'Somethinc Niacinamide 10% + Moisture Serum (20ml)', category: 'skincare', price: 89000, originalPrice: 115000, discount: '22%', rating: '4.8', sales: '2.1rb+', isMall: true, location: 'Jakarta Selatan', image: 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&w=600&q=80', description: 'Mencerahkan flek hitam bekas jerawat dan mengontrol sebum berlebih.' },
@@ -516,7 +636,9 @@
                         { id: '5', name: 'Minyak Rem Prestone DOT 4 High Temp (300ml)', category: 'automotive', price: 45000, originalPrice: 55000, discount: '18%', rating: '4.8', sales: '950+', isMall: true, location: 'Jakarta Pusat', image: 'https://images.unsplash.com/photo-1580273916550-e323be2ae537?auto=format&fit=crop&w=600&q=80', description: 'Formula asam borat mencegah vapor lock pada pengereman suhu ekstrem.' },
                         { id: '6', name: 'ID-Apexride Stand Phone Holder Motor Alumunium', category: 'automotive', price: 35000, originalPrice: 60000, discount: '42%', rating: '4.8', sales: '3rb+', isMall: false, location: 'Jakarta Barat', image: 'https://images.unsplash.com/photo-1586105251261-72a756497a11?auto=format&fit=crop&w=600&q=80', description: 'Holder HP motor kokoh anti goyang dan anti karat untuk stang motor/spion.' },
                         { id: '7', name: 'NTZN Jersey Oversize Boxy Vintage Roronoa Zoro 62 V.2', category: 'fashion', price: 82975, originalPrice: 400000, discount: '79%', rating: '4.9', sales: '1rb+', isMall: true, location: 'Kota Banjar', image: 'https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&fit=crop&w=600&q=80', description: 'Bahan Dryfit Premium adem, sablon plastisol hd, jahitan rapi boxy fit vintage style.' },
-                        { id: '8', name: 'Kemeja Linen Premium Regular Fit Sage Green', category: 'fashion', price: 249000, originalPrice: 320000, discount: '22%', rating: '4.8', sales: '1.2rb+', isMall: false, location: 'Bandung', image: 'https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=600&q=80', description: 'Bahan linen serat alami adem, ringan, dan breathable untuk OOTD casual.' }
+                        { id: '8', name: 'Kemeja Linen Premium Regular Fit Sage Green', category: 'fashion', price: 249000, originalPrice: 320000, discount: '22%', rating: '4.8', sales: '1.2rb+', isMall: false, location: 'Bandung', image: 'https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=600&q=80', description: 'Bahan linen serat alami adem, ringan, dan breathable untuk OOTD casual.' },
+                        { id: '9', name: 'Ban Motor Tubeless IRC NR73 Ring 14 (70/90-14)', category: 'automotive', price: 265000, originalPrice: 310000, discount: '14%', rating: '4.8', sales: '870+', isMall: true, location: 'Surabaya', image: 'https://images.unsplash.com/photo-1634071257121-8cd59787ff1c?auto=format&fit=crop&w=600&q=80', description: 'Kompon karet grip kuat di jalan basah maupun kering, cocok untuk motor matic harian.' },
+                        { id: '10', name: 'Sneakers Canvas Low Everyday Casual White', category: 'fashion', price: 189000, originalPrice: 259000, discount: '27%', rating: '4.7', sales: '640+', isMall: false, location: 'Bandung', image: 'https://images.unsplash.com/photo-1676379827610-c380c52db0c6?auto=format&fit=crop&w=600&q=80', description: 'Sneakers canvas ringan, sol empuk untuk aktivitas harian, mudah dipadukan dengan OOTD apapun.' }
                     ];
                 },
 
@@ -531,6 +653,40 @@
 
                 resetFilter() { this.selectedCategory = 'all'; this.searchQuery = ''; },
                 formatRupiah(num) { return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(num || 0); },
+
+                toggleWishlist(product) {
+                    const idx = this.wishlist.indexOf(product.id);
+                    if (idx >= 0) this.wishlist.splice(idx, 1);
+                    else this.wishlist.push(product.id);
+                },
+                isWishlisted(product) { return this.wishlist.includes(product.id); },
+
+                // Quick-add straight from the catalog card (default variant), same pattern as
+                // the "+" button you see on Tokopedia/Shopee product cards.
+                addToCartQuick(product) {
+                    const cat = product.category;
+                    const defaultVariant = cat === 'skincare' ? '20ml' : (cat === 'automotive' ? 'Depan / Front' : 'M');
+                    const existing = this.cart.find(i => i.id === product.id && i.variant === defaultVariant);
+                    if (existing) existing.qty++;
+                    else this.cart.push({ ...product, qty: 1, variant: defaultVariant });
+                },
+
+                startFlashSaleCountdown() {
+                    // Counts down to midnight local time, resets automatically each day.
+                    const tick = () => {
+                        const now = new Date();
+                        const midnight = new Date(now);
+                        midnight.setHours(24, 0, 0, 0);
+                        const diff = Math.max(0, midnight - now);
+                        const h = Math.floor(diff / 3600000);
+                        const m = Math.floor((diff % 3600000) / 60000);
+                        const s = Math.floor((diff % 60000) / 1000);
+                        const pad = n => String(n).padStart(2, '0');
+                        this.flashSale = { h: pad(h), m: pad(m), s: pad(s) };
+                    };
+                    tick();
+                    setInterval(tick, 1000);
+                },
 
                 addToCart(product) {
                     const existing = this.cart.find(i => i.id === product.id && i.variant === this.selectedVariant);
@@ -551,28 +707,113 @@
 
                 openAiModal(category) { this.quizCategory = category; this.quizInput = ''; this.aiResult = null; this.isAnalyzerOpen = true; },
 
-                runAiAnalysisWithGemini() {
-                    if (!this.quizInput) return;
+                // AI resolution order:
+                //   1. geminiApiKey set   -> calls Gemini directly from the browser (works right
+                //      now for testing, but exposes the key in page source — fine for you
+                //      trying it out locally, NOT fine once this is live on GitHub Pages).
+                //   2. geminiProxyUrl set -> calls your own serverless proxy that holds the key
+                //      safely server-side (the correct setup for a public site).
+                //   3. neither set        -> falls back to the local scoring engine so the
+                //      feature still works even with no AI configured at all.
+                async runAiAnalysisWithGemini() {
+                    if (!this.quizInput || this.products.length === 0) return;
                     this.isAiProcessing = true;
                     this.aiResult = null;
 
-                    setTimeout(() => {
-                        let targetCategory = this.quizCategory;
-                        let matched = this.products.find(p => p.category === targetCategory) || this.products[0];
-                        let lowerInput = this.quizInput.toLowerCase();
-
-                        let exactMatch = this.products.find(p => 
-                            lowerInput.split(' ').some(w => w.length > 3 && (p.name.toLowerCase().includes(w) || p.description.toLowerCase().includes(w)))
-                        );
-
-                        if (exactMatch) matched = exactMatch;
-
-                        this.aiResult = {
-                            diagnosis: `Berdasarkan analisis AI terhadap keluhan "${this.quizInput}", produk ${matched.name} ini adalah solusi paling presisi yang kami rekomendasikan.`,
-                            recommendedProduct: matched
-                        };
+                    try {
+                        if (this.geminiApiKey) {
+                            this.aiResult = await this.callGeminiDirect(this.quizInput, this.quizCategory);
+                        } else if (this.geminiProxyUrl) {
+                            this.aiResult = await this.callGeminiProxy(this.quizInput, this.quizCategory);
+                        } else {
+                            this.aiResult = this.localNeedsAnalysis(this.quizInput, this.quizCategory);
+                        }
+                    } catch (err) {
+                        console.error('AI analysis failed, falling back to local engine:', err);
+                        this.aiResult = this.localNeedsAnalysis(this.quizInput, this.quizCategory);
+                    } finally {
                         this.isAiProcessing = false;
-                    }, 800);
+                    }
+                },
+
+                // Calls Google's Generative Language API (Gemini) directly from the browser using
+                // the key pasted into the settings panel. Model: gemini-2.0-flash.
+                async callGeminiDirect(complaint, category) {
+                    const catalogForPrompt = this.products.map(p => `- id:${p.id} | ${p.name} | kategori:${p.category} | Rp${p.price} | ${p.description}`).join('\n');
+                    const prompt = `Kamu adalah asisten belanja untuk marketplace bernama ZAPLACE AI. Berikut katalog produk yang tersedia:\n${catalogForPrompt}\n\nSeorang pembeli di kategori "${category}" menuliskan keluhan/kebutuhan berikut:\n"${complaint}"\n\nPilih SATU produk dari katalog di atas yang paling cocok untuk menjawab keluhan tersebut, dan jelaskan alasannya dalam 1-2 kalimat berbahasa Indonesia yang ramah dan meyakinkan. Balas HANYA dengan JSON valid persis seperti ini, tanpa markdown, tanpa teks lain:\n{"diagnosis": "...", "recommendedProductId": "..."}`;
+
+                    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${encodeURIComponent(this.geminiApiKey)}`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            contents: [{ parts: [{ text: prompt }] }],
+                            generationConfig: { temperature: 0.4, maxOutputTokens: 300 }
+                        })
+                    });
+
+                    if (!res.ok) {
+                        const errText = await res.text().catch(() => '');
+                        throw new Error(`Gemini API error ${res.status}: ${errText}`);
+                    }
+
+                    const data = await res.json();
+                    const rawText = data?.candidates?.[0]?.content?.parts?.map(p => p.text).join('') || '';
+                    const cleaned = rawText.replace(/```json|```/g, '').trim();
+                    const parsed = JSON.parse(cleaned);
+
+                    const matched = this.products.find(p => p.id === String(parsed.recommendedProductId)) || this.products[0];
+                    return { diagnosis: parsed.diagnosis, recommendedProduct: matched };
+                },
+
+                // Calls your own serverless proxy instead of Gemini directly — the safe pattern
+                // for production. Deploy a Supabase Edge Function (or Cloudflare Worker / Vercel
+                // function) that receives { complaint, category, catalog }, forwards an
+                // equivalent prompt to Gemini using a server-side secret key, and returns
+                // { diagnosis, recommendedProductId }.
+                async callGeminiProxy(complaint, category) {
+                    const catalogForPrompt = this.products.map(p => ({ id: p.id, name: p.name, category: p.category, price: p.price, description: p.description }));
+                    const res = await fetch(this.geminiProxyUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ complaint, category, catalog: catalogForPrompt })
+                    });
+                    if (!res.ok) throw new Error('Proxy returned ' + res.status);
+                    const data = await res.json();
+                    const matched = this.products.find(p => p.id === data.recommendedProductId) || this.products[0];
+                    return { diagnosis: data.diagnosis, recommendedProduct: matched };
+                },
+
+                // Deterministic, transparent scoring engine used whenever no real Gemini proxy is
+                // configured. It scores every product in the catalog against the words in the
+                // complaint (not just the first keyword hit), boosts matches in the chosen
+                // category, and only falls back to "first product in category" if nothing scores
+                // above zero — so it no longer just guesses the first item blindly.
+                localNeedsAnalysis(complaintRaw, category) {
+                    const complaint = complaintRaw.toLowerCase();
+                    const stopwords = new Set(['dan','yang','atau','untuk','saya','ini','itu','dengan','pada','ada','nya','ke','di','dari','juga']);
+                    const words = complaint.split(/\W+/).filter(w => w.length > 3 && !stopwords.has(w));
+
+                    let best = null;
+                    let bestScore = 0;
+                    for (const p of this.products) {
+                        const haystack = (p.name + ' ' + p.description).toLowerCase();
+                        let score = 0;
+                        for (const w of words) {
+                            if (haystack.includes(w)) score += 2;
+                        }
+                        if (p.category === category) score += 1;
+                        if (score > bestScore) { bestScore = score; best = p; }
+                    }
+
+                    if (!best) {
+                        best = this.products.find(p => p.category === category) || this.products[0];
+                    }
+
+                    const diagnosis = bestScore > 0
+                        ? `Berdasarkan kata kunci pada keluhan "${complaintRaw}", produk yang paling relevan dari katalog kami adalah ${best.name}.`
+                        : `Belum ada kecocokan kata kunci yang kuat untuk "${complaintRaw}", jadi kami tampilkan rekomendasi terpopuler di kategori ${category}: ${best.name}. Coba jelaskan keluhan lebih spesifik agar rekomendasinya lebih presisi.`;
+
+                    return { diagnosis, recommendedProduct: best };
                 },
 
                 applyAiRecommendation(product) { this.addToCart(product); this.isAnalyzerOpen = false; },
@@ -581,6 +822,25 @@
                     let itemsList = this.cart.map(i => `- ${i.name} (Varian: ${i.variant || 'Standard'}) (${i.qty}x) = ${this.formatRupiah(i.price * i.qty)}`).join('\n');
                     let text = `*ORDER BARU - ZAPLACE AI*\n\n*Daftar Belanjaan:*\n${itemsList}\n\n*Total Tagihan:* ${this.formatRupiah(this.cartTotalPrice)}`;
                     window.open(`https://wa.me/6281317667785?text=${encodeURIComponent(text)}`, '_blank');
+                },
+
+                // Generates a display-only QR (via a free QR-image API) that encodes the order
+                // reference + total, so the buyer and seller can match it up manually over WhatsApp.
+                // This is NOT a bank-integrated dynamic QRIS — see note in the modal for what that
+                // would actually require (a registered QRIS merchant via a payment gateway).
+                openQrisCheckout() {
+                    if (this.cart.length === 0) return;
+                    this.currentOrderId = 'ZPL-' + Date.now().toString().slice(-8);
+                    const payload = `ZAPLACE AI | Order ${this.currentOrderId} | Total ${this.formatRupiah(this.cartTotalPrice)}`;
+                    this.qrisImageUrl = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(payload)}`;
+                    this.isQrisOpen = true;
+                },
+
+                confirmQrisPaid() {
+                    let itemsList = this.cart.map(i => `- ${i.name} (Varian: ${i.variant || 'Standard'}) (${i.qty}x) = ${this.formatRupiah(i.price * i.qty)}`).join('\n');
+                    let text = `*KONFIRMASI PEMBAYARAN QRIS*\n\n*No. Order:* ${this.currentOrderId}\n\n*Daftar Belanjaan:*\n${itemsList}\n\n*Total Tagihan:* ${this.formatRupiah(this.cartTotalPrice)}\n\nSaya sudah melakukan pembayaran QRIS untuk order ini, mohon dicek ya. Terima kasih.`;
+                    window.open(`https://wa.me/6281317667785?text=${encodeURIComponent(text)}`, '_blank');
+                    this.isQrisOpen = false;
                 }
             }
         }).mount('#app');
